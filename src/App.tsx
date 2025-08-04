@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import "./App.css";
 
 function App() {
@@ -15,8 +16,8 @@ function App() {
           }}
         >
           <li>
-            <a
-              href="/case-one"
+            <Link
+              to={"/case-one"}
               style={{
                 textDecoration: "none",
                 color: "#fff",
@@ -27,11 +28,11 @@ function App() {
               }}
             >
               Case One
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              href="/case-two"
+            <Link
+              to="/case-two"
               style={{
                 textDecoration: "none",
                 color: "#fff",
@@ -42,11 +43,11 @@ function App() {
               }}
             >
               Case Two
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              href="/case-three"
+            <Link
+              to="/case-three"
               style={{
                 textDecoration: "none",
                 color: "#fff",
@@ -57,7 +58,7 @@ function App() {
               }}
             >
               Case Three
-            </a>
+            </Link>
           </li>
         </ul>
       </nav>
