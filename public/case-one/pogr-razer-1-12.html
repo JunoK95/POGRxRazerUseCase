@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Razer Opportunity - POGR x Razer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Slide number */
+        .slide-number {
+            position: absolute;
+            top: 40px;
+            right: 60px;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* Animated background */
+        .bg-effect {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 255, 0, 0.1) 0%, transparent 50%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.1); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 100px 80px 60px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        h1 {
+            font-size: 64px;
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #00ff00 0%, #00cc00 50%, #00ff00 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-shift 3s ease-in-out infinite;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .subtitle {
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 300;
+        }
+
+        /* Venn Diagram Section */
+        .venn-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .venn-diagram {
+            position: relative;
+            width: 600px;
+            height: 400px;
+        }
+
+        .circle {
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+        }
+
+        .circle-pogr {
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: radial-gradient(circle, rgba(0, 255, 0, 0.15) 0%, rgba(0, 255, 0, 0.05) 70%);
+            border: 2px solid rgba(0, 255, 0, 0.4);
+        }
+
+        .circle-razer {
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: radial-gradient(circle, rgba(0, 255, 0, 0.15) 0%, rgba(0, 255, 0, 0.05) 70%);
+            border: 2px solid rgba(0, 255, 0, 0.4);
+        }
+
+        .circle:hover {
+            transform: translateY(-50%) scale(1.05);
+            border-color: rgba(0, 255, 0, 0.7);
+            box-shadow: 0 0 40px rgba(0, 255, 0, 0.3);
+        }
+
+        .circle-label {
+            font-size: 20px;
+            font-weight: 700;
+            color: #00ff00;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .circle-text {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.4;
+        }
+
+        /* Intersection */
+        .intersection {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(0, 255, 0, 0.3) 0%, rgba(0, 255, 0, 0.1) 70%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 30px;
+            z-index: 10;
+            animation: intersection-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes intersection-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0.4); }
+            50% { box-shadow: 0 0 0 20px rgba(0, 255, 0, 0); }
+        }
+
+        .intersection-text {
+            font-size: 16px;
+            font-weight: 700;
+            color: #00ff00;
+            text-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+        }
+
+        /* Opportunities Grid */
+        .opportunities {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .opportunity-card {
+            background: linear-gradient(135deg, rgba(0, 255, 0, 0.05) 0%, rgba(0, 255, 0, 0.02) 100%);
+            border: 1px solid rgba(0, 255, 0, 0.2);
+            border-radius: 12px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .opportunity-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 255, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 255, 0, 0.1);
+        }
+
+        .opportunity-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #00ff00;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .opportunity-list {
+            list-style: none;
+        }
+
+        .opportunity-list li {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .opportunity-list li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #00ff00;
+            font-weight: 700;
+        }
+
+        /* Quote Section */
+        .quote-section {
+            text-align: center;
+            margin-top: 60px;
+            padding: 30px;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.05), transparent);
+            border-left: 2px solid rgba(0, 255, 0, 0.3);
+            border-right: 2px solid rgba(0, 255, 0, 0.3);
+        }
+
+        .big-quote {
+            font-size: 28px;
+            font-weight: 300;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.4;
+        }
+
+        .big-quote strong {
+            color: #00ff00;
+            font-weight: 700;
+        }
+
+        /* Animated lines */
+        .connection-lines {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00ff00, transparent);
+            animation: line-move 3s ease-in-out infinite;
+        }
+
+        .line1 {
+            top: 30%;
+            left: -100%;
+            width: 300px;
+            animation-delay: 0s;
+        }
+
+        .line2 {
+            bottom: 40%;
+            right: -100%;
+            width: 250px;
+            animation-delay: 1.5s;
+        }
+
+        @keyframes line-move {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(100vw + 100%)); }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-effect"></div>
+    <div class="connection-lines">
+        <div class="line line1"></div>
+        <div class="line line2"></div>
+    </div>
+
+    <div class="slide-number">11/12</div>
+
+    <div class="container">
+        <div class="header">
+            <h1>THE RAZER OPPORTUNITY</h1>
+            <p class="subtitle">What Happens When Pogr Meets Razer?</p>
+        </div>
+
+        <div class="venn-container">
+            <div class="venn-diagram">
+                <div class="circle circle-pogr">
+                    <div>
+                        <div class="circle-label">POGR</div>
+                        <div class="circle-text">
+                            Data Analytics<br>
+                            Anomaly Detection<br>
+                            Player Insights
+                        </div>
+                    </div>
+                </div>
+                <div class="circle circle-razer">
+                    <div>
+                        <div class="circle-label">RAZER</div>
+                        <div class="circle-text">
+                            Hardware Data<br>
+                            128M+ Users<br>
+                            Gaming Ecosystem
+                        </div>
+                    </div>
+                </div>
+                <div class="intersection">
+                    <div class="intersection-text">
+                        Revolutionary<br>Insights
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="opportunities">
+            <div class="opportunity-card">
+                <h3 class="opportunity-title">For Developers</h3>
+                <ul class="opportunity-list">
+                    <li>Optimize games for Razer hardware configurations</li>
+                    <li>Exclusive performance benchmarking tools</li>
+                    <li>Priority bug detection for Razer users</li>
+                </ul>
+            </div>
+
+            <div class="opportunity-card">
+                <h3 class="opportunity-title">For Players</h3>
+                <ul class="opportunity-list">
+                    <li>Hardware settings that improve K/D ratios</li>
+                    <li>Personalized performance coaching</li>
+                    <li>Exclusive tournaments with data-driven matchmaking</li>
+                </ul>
+            </div>
+
+            <div class="opportunity-card">
+                <h3 class="opportunity-title">For Razer</h3>
+                <ul class="opportunity-list">
+                    <li>Become the essential platform for serious gamers</li>
+                    <li>Data moat competitors can't cross</li>
+                    <li>New revenue streams from analytics services</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="quote-section">
+            <p class="big-quote">
+                "Together, we don't just see <strong>how</strong> games are played.<br>
+                We see <strong>how games should be played.</strong>"
+            </p>
+        </div>
+    </div>
+</body>
+</html>

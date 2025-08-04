@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualization Showcase - Data That Tells Stories</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+
+        .logo-divider {
+            color: #00ff00;
+        }
+
+        .slide-number {
+            color: #666;
+            font-size: 0.9rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Main container */
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0 60px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: slideDown 0.8s 0.2s forwards;
+        }
+
+        /* Visualization grid */
+        .viz-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            flex: 1;
+            opacity: 0;
+            animation: fadeIn 1s 0.5s forwards;
+        }
+
+        /* Visualization card */
+        .viz-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 2px solid #333;
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: slideInUp 0.5s forwards;
+        }
+
+        .viz-card:nth-child(1) { animation-delay: 0.6s; }
+        .viz-card:nth-child(2) { animation-delay: 0.7s; }
+        .viz-card:nth-child(3) { animation-delay: 0.8s; }
+        .viz-card:nth-child(4) { animation-delay: 0.9s; }
+        .viz-card:nth-child(5) { animation-delay: 1.0s; }
+        .viz-card:nth-child(6) { animation-delay: 1.1s; }
+
+        .viz-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: #00ff00;
+            box-shadow: 0 20px 40px rgba(0, 255, 0, 0.3);
+            background: rgba(0, 255, 0, 0.05);
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Card header */
+        .viz-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .viz-icon {
+            font-size: 2rem;
+            filter: grayscale(0.5);
+            transition: all 0.3s ease;
+        }
+
+        .viz-card:hover .viz-icon {
+            filter: grayscale(0);
+            transform: scale(1.2);
+        }
+
+        .viz-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #00ff00;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .viz-description {
+            font-size: 0.9rem;
+            color: #999;
+            margin-bottom: 1.5rem;
+            min-height: 40px;
+        }
+
+        /* Visualization examples */
+        .viz-demo {
+            height: 150px;
+            background: #0a0a0a;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Heat Map Demo */
+        .heatmap-demo {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at 30% 40%, rgba(255, 0, 0, 0.4) 0%, transparent 40%),
+                        radial-gradient(ellipse at 70% 60%, rgba(255, 255, 0, 0.3) 0%, transparent 30%),
+                        radial-gradient(ellipse at 50% 80%, rgba(0, 255, 0, 0.3) 0%, transparent 35%);
+            animation: heatmapPulse 3s infinite;
+        }
+
+        @keyframes heatmapPulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        /* Dashboard Demo */
+        .dashboard-demo {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            padding: 1rem;
+            width: 100%;
+        }
+
+        .mini-stat {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00ff00;
+            border-radius: 4px;
+            padding: 0.5rem;
+            text-align: center;
+        }
+
+        .mini-stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+        }
+
+        .mini-stat-label {
+            font-size: 0.6rem;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        /* Radar Demo */
+        .radar-demo {
+            width: 120px;
+            height: 120px;
+            position: relative;
+        }
+
+        .radar-shape {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 255, 0, 0.2);
+            clip-path: polygon(50% 20%, 80% 40%, 80% 70%, 50% 90%, 20% 70%, 20% 40%);
+            animation: radarRotate 10s linear infinite;
+        }
+
+        @keyframes radarRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .radar-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 1px solid #333;
+            border-radius: 50%;
+        }
+
+        /* Flow Diagram Demo */
+        .flow-demo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+        }
+
+        .flow-node {
+            width: 30px;
+            height: 30px;
+            background: #00ff00;
+            border-radius: 50%;
+            position: relative;
+            animation: flowPulse 2s infinite;
+        }
+
+        .flow-node:nth-child(2) { animation-delay: 0.3s; background: #ffff00; }
+        .flow-node:nth-child(3) { animation-delay: 0.6s; background: #ff00ff; }
+
+        @keyframes flowPulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        .flow-connector {
+            width: 20px;
+            height: 2px;
+            background: #666;
+        }
+
+        /* Spike Detector Demo */
+        .spike-demo {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            padding: 1rem;
+            height: 100%;
+        }
+
+        .spike-bar {
+            width: 15px;
+            background: #00ff00;
+            border-radius: 2px 2px 0 0;
+            transition: all 0.3s ease;
+        }
+
+        .spike-bar.alert {
+            background: #ff0000;
+            animation: spikeAlert 1s infinite;
+        }
+
+        @keyframes spikeAlert {
+            0%, 100% { box-shadow: 0 0 10px #ff0000; }
+            50% { box-shadow: 0 0 20px #ff0000, 0 0 30px #ff0000; }
+        }
+
+        /* Leaderboard Demo */
+        .leaderboard-demo {
+            padding: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .leader-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.3rem;
+            margin-bottom: 0.3rem;
+            background: rgba(0, 255, 0, 0.1);
+            border-radius: 3px;
+        }
+
+        .leader-row:first-child {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+        }
+
+        .leader-rank {
+            font-weight: bold;
+        }
+
+        .leader-name {
+            flex: 1;
+            margin: 0 0.5rem;
+        }
+
+        .leader-score {
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Bottom tagline */
+        .tagline {
+            text-align: center;
+            font-size: 1.5rem;
+            font-style: italic;
+            color: #00ff00;
+            margin-top: 2rem;
+            opacity: 0;
+            animation: fadeIn 1s 2s forwards;
+            text-shadow: 0 0 20px #00ff00;
+        }
+
+        /* Hover effect overlay */
+        .viz-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 255, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .viz-card:hover .viz-overlay {
+            opacity: 1;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo-container">
+            <span>POGR</span>
+            <span class="logo-divider">×</span>
+            <span style="color: #00ff00;">RAZER</span>
+        </div>
+        <div class="slide-number">09 / 13</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <h1 class="title">DATA THAT TELLS STORIES</h1>
+        
+        <div class="viz-grid">
+            <!-- Heat Maps -->
+            <div class="viz-card">
+                <div class="viz-header">
+                    <span class="viz-icon">🗺️</span>
+                    <h3 class="viz-title">Heat Maps</h3>
+                </div>
+                <p class="viz-description">Player movement, death locations, item spawns</p>
+                <div class="viz-demo">
+                    <div class="heatmap-demo"></div>
+                </div>
+                <div class="viz-overlay"></div>
+            </div>
+
+            <!-- Real-Time Dashboards -->
+            <div class="viz-card">
+                <div class="viz-header">
+                    <span class="viz-icon">📊</span>
+                    <h3 class="viz-title">Real-Time Dashboards</h3>
+                </div>
+                <p class="viz-description">Live player counts, server health, economy flow</p>
+                <div class="viz-demo">
+                    <div class="dashboard-demo">
+                        <div class="mini-stat">
+                            <div class="mini-stat-value">2.4K</div>
+                            <div class="mini-stat-label">Players</div>
+                        </div>
+                        <div class="mini-stat">
+                            <div class="mini-stat-value">99%</div>
+                            <div class="mini-stat-label">Health</div>
+                        </div>
+                        <div class="mini-stat">
+                            <div class="mini-stat-value">+12%</div>
+                            <div class="mini-stat-label">Economy</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="viz-overlay"></div>
+            </div>
+
+            <!-- Performance Radars -->
+            <div class="viz-card">
+                <div class="viz-header">
+                    <span class="viz-icon">🎯</span>
+                    <h3 class="viz-title">Performance Radars</h3>
+                </div>
+                <p class="viz-description">Multi-dimensional skill analysis</p>
+                <div class="viz-demo">
+                    <div class="radar-demo">
+                        <div class="radar-grid"></div>
+                        <div class="radar-shape"></div>
+                    </div>
+                </div>
+                <div class="viz-overlay"></div>
+            </div>
+
+            <!-- Flow Diagrams -->
+            <div class="viz-card">
+                <div class="viz-header">
+                    <span class="viz-icon">🌊</span>
+                    <h3 class="viz-title">Flow Diagrams</h3>
+                </div>
+                <p class="viz-description">Quest progression, player journey mapping</p>
+                <div class="viz-demo">
+                    <div class="flow-demo">
+                        <div class="flow-node"></div>
+                        <div class="flow-connector"></div>
+                        <div class="flow-node"></div>
+                        <div class="flow-connector"></div>
+                        <div class="flow-node"></div>
+                    </div>
+                </div>
+                <div class="viz-overlay"></div>
+            </div>
+
+            <!-- Spike Detectors -->
+            <div class="viz-card">
+                <div class="viz-header">
+                    <span class="viz-icon">⚡</span>
+                    <h3 class="viz-title">Spike Detectors</h3>
+                </div>
+                <p class="viz-description">Anomaly identification, exploit alerts</p>
+                <div class="viz-demo">
+                    <div class="spike-demo">
+                        <div class="spike-bar" style="height: 40%"></div>
+                        <div class="spike-bar" style="height: 60%"></div>
+                        <div class="spike-bar alert" style="height: 90%"></div>
+                        <div class="spike-bar" style="height: 50%"></div>
+                        <div class="spike-bar" style="height: 45%"></div>
+                    </div>
+                </div>
+                <div class="viz-overlay"></div>
+            </div>
+
+            <!-- Leaderboards++ -->
+            <div class="viz-card">
+                <div class="viz-header">
+                    <span class="viz-icon">🏆</span>
+                    <h3 class="viz-title">Leaderboards++</h3>
+                </div>
+                <p class="viz-description">Beyond scores - efficiency, creativity, mastery</p>
+                <div class="viz-demo">
+                    <div class="leaderboard-demo">
+                        <div class="leader-row">
+                            <span class="leader-rank">#1</span>
+                            <span class="leader-name">ShadowX</span>
+                            <span class="leader-score">98.7%</span>
+                        </div>
+                        <div class="leader-row">
+                            <span class="leader-rank">#2</span>
+                            <span class="leader-name">NeoKing</span>
+                            <span class="leader-score">95.2%</span>
+                        </div>
+                        <div class="leader-row">
+                            <span class="leader-rank">#3</span>
+                            <span class="leader-name">Phoenix</span>
+                            <span class="leader-score">94.8%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="viz-overlay"></div>
+            </div>
+        </div>
+        
+        <p class="tagline">"Beautiful data for beautiful games"</p>
+    </div>
+
+    <script>
+        // Animate dashboard values
+        setInterval(() => {
+            const playerCount = document.querySelector('.mini-stat-value');
+            const currentValue = parseFloat(playerCount.textContent);
+            const change = (Math.random() - 0.5) * 0.1;
+            playerCount.textContent = (currentValue + change).toFixed(1) + 'K';
+        }, 2000);
+
+        // Animate spike bars
+        const spikeBars = document.querySelectorAll('.spike-bar:not(.alert)');
+        setInterval(() => {
+            spikeBars.forEach(bar => {
+                const newHeight = 30 + Math.random() * 40;
+                bar.style.height = newHeight + '%';
+            });
+        }, 1500);
+
+        // Add hover sound effect simulation
+        const vizCards = document.querySelectorAll('.viz-card');
+        vizCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                // Create a visual feedback for "sound"
+                const icon = card.querySelector('.viz-icon');
+                icon.style.transform = 'scale(1.3) rotate(10deg)';
+                setTimeout(() => {
+                    icon.style.transform = 'scale(1.2) rotate(0deg)';
+                }, 200);
+            });
+        });
+
+        // Rotating leaderboard scores
+        setInterval(() => {
+            const scores = document.querySelectorAll('.leader-score');
+            scores.forEach(score => {
+                const current = parseFloat(score.textContent);
+                const change = (Math.random() - 0.5) * 0.5;
+                score.textContent = (current + change).toFixed(1) + '%';
+            });
+        }, 3000);
+    </script>
+</body>
+</html>

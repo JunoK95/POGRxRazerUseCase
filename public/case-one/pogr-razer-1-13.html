@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Next Steps - POGR x Razer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Slide number */
+        .slide-number {
+            position: absolute;
+            top: 40px;
+            right: 60px;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* Dynamic background */
+        .bg-particles {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #00ff00;
+            opacity: 0.3;
+            animation: drift 20s infinite;
+        }
+
+        @keyframes drift {
+            0% { transform: translate(0, 100vh) rotate(0deg); }
+            100% { transform: translate(100px, -100px) rotate(360deg); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 80px 80px 60px;
+            background: radial-gradient(ellipse at center top, rgba(0, 255, 0, 0.05) 0%, transparent 50%);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #00ff00 0%, #00cc00 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px rgba(0, 255, 0, 0.4);
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 300;
+        }
+
+        /* Action Cards Section */
+        .action-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 20px;
+        }
+
+        .action-card {
+            background: linear-gradient(135deg, rgba(0, 255, 0, 0.1) 0%, rgba(0, 255, 0, 0.02) 100%);
+            border: 2px solid rgba(0, 255, 0, 0.2);
+            border-radius: 16px;
+            padding: 24px 20px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .action-card::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, rgba(0, 255, 0, 0.15) 0%, transparent 40%);
+            transition: all 0.6s ease;
+        }
+
+        .action-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: #00ff00;
+            box-shadow: 0 20px 40px rgba(0, 255, 0, 0.2);
+        }
+
+        .action-card:hover::before {
+            top: -50%;
+            left: -50%;
+        }
+
+        .action-icon {
+            font-size: 36px;
+            color: #00ff00;
+            margin-bottom: 12px;
+            display: block;
+            filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.5));
+        }
+
+        .action-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .action-desc {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.4;
+        }
+
+        /* Rocket Launch Animation */
+        .rocket-container {
+            position: relative;
+            height: 220px;
+            margin: 25px 0 40px 0;
+            overflow: hidden;
+            background: radial-gradient(ellipse at center bottom, rgba(0, 255, 0, 0.05) 0%, transparent 50%);
+            border-radius: 16px;
+            box-shadow: inset 0 0 30px rgba(0, 255, 0, 0.1);
+        }
+
+        .rocket {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: rocket-launch 6s ease-in-out infinite;
+        }
+
+        @keyframes rocket-launch {
+            0%, 100% {
+                bottom: 30px;
+                transform: translateX(-50%) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            5% {
+                bottom: 28px;
+                transform: translateX(-51%) rotate(-0.5deg) scale(1);
+            }
+            10% {
+                bottom: 32px;
+                transform: translateX(-49%) rotate(0.5deg) scale(1);
+            }
+            15% {
+                bottom: 29px;
+                transform: translateX(-50.5%) rotate(-0.3deg) scale(1.02);
+            }
+            20% {
+                bottom: 31px;
+                transform: translateX(-49.5%) rotate(0.3deg) scale(1.02);
+            }
+            30% {
+                bottom: 30px;
+                transform: translateX(-50%) rotate(0deg) scale(1.05);
+            }
+            50% {
+                bottom: 120px;
+                transform: translateX(-50%) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            70% {
+                bottom: 250px;
+                transform: translateX(-50%) rotate(0deg) scale(0.8);
+                opacity: 0.5;
+            }
+            90% {
+                bottom: -50px;
+                transform: translateX(-50%) rotate(0deg) scale(0.6);
+                opacity: 0;
+            }
+        }
+
+        .rocket-trail {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 0;
+            background: linear-gradient(to bottom, #00ff00, rgba(0, 255, 0, 0.3), transparent);
+            animation: trail-grow 6s ease-in-out infinite;
+            opacity: 0;
+            box-shadow: 0 0 10px #00ff00;
+        }
+
+        @keyframes trail-grow {
+            0%, 35% {
+                height: 0;
+                opacity: 0;
+            }
+            45% {
+                height: 50px;
+                opacity: 0.8;
+            }
+            60% {
+                height: 100px;
+                opacity: 0.5;
+            }
+            75% {
+                height: 150px;
+                opacity: 0.2;
+            }
+            90%, 100% {
+                height: 0;
+                opacity: 0;
+            }
+        }
+
+        .rocket-body {
+            width: 40px;
+            height: 60px;
+            background: linear-gradient(135deg, #00ff00 0%, #00cc00 50%, #00ff00 100%);
+            border-radius: 50% 50% 40% 40% / 60% 60% 40% 40%;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.6), inset 0 0 10px rgba(0, 0, 0, 0.3);
+            animation: rocket-glow 6s ease-in-out infinite;
+        }
+
+        @keyframes rocket-glow {
+            0%, 20%, 100% {
+                box-shadow: 0 0 20px rgba(0, 255, 0, 0.6), inset 0 0 10px rgba(0, 0, 0, 0.3);
+            }
+            30% {
+                box-shadow: 0 0 40px rgba(0, 255, 0, 1), inset 0 0 20px rgba(0, 255, 0, 0.3);
+            }
+        }
+
+        .rocket-body::after {
+            content: 'R';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 16px;
+            font-weight: 900;
+            color: #000;
+            text-shadow: 0 0 3px rgba(0, 255, 0, 0.5);
+            animation: logo-pulse 6s ease-in-out infinite;
+        }
+
+        @keyframes logo-pulse {
+            0%, 20%, 100% {
+                text-shadow: 0 0 3px rgba(0, 255, 0, 0.5);
+            }
+            30% {
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
+            }
+        }
+
+        .rocket-window {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff00;
+            border-radius: 50%;
+            box-shadow: inset 0 0 5px rgba(0, 255, 0, 0.5);
+        }
+
+        .rocket-fin-left,
+        .rocket-fin-right {
+            position: absolute;
+            bottom: 5px;
+            width: 15px;
+            height: 25px;
+            background: linear-gradient(to bottom, #00cc00 0%, #009900 100%);
+            clip-path: polygon(0 0, 100% 50%, 100% 100%, 0 100%);
+        }
+
+        .rocket-fin-left {
+            left: -10px;
+            transform: rotate(-20deg);
+        }
+
+        .rocket-fin-right {
+            right: -10px;
+            transform: rotate(20deg) scaleX(-1);
+        }
+
+        .rocket-flames {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: flame-flicker 0.2s ease-in-out infinite alternate;
+        }
+
+        @keyframes flame-flicker {
+            0% { transform: translateX(-50%) scaleY(1); }
+            100% { transform: translateX(-50%) scaleY(1.2); }
+        }
+
+        .flame {
+            position: absolute;
+            width: 10px;
+            height: 20px;
+            background: linear-gradient(to top, transparent, #00ff00, #00ff88, #ffffff);
+            border-radius: 50% 50% 50% 50% / 0% 0% 100% 100%;
+            opacity: 0.9;
+            filter: blur(2px);
+            box-shadow: 0 0 10px #00ff00;
+        }
+
+        .flame1 {
+            left: -5px;
+            animation: flame-dance 0.3s ease-in-out infinite;
+        }
+
+        .flame2 {
+            left: 0;
+            height: 25px;
+            animation: flame-dance 0.3s ease-in-out infinite 0.1s;
+        }
+
+        .flame3 {
+            left: 5px;
+            animation: flame-dance 0.3s ease-in-out infinite 0.2s;
+        }
+
+        @keyframes flame-dance {
+            0%, 100% { transform: scaleX(1) rotate(0deg); }
+            50% { transform: scaleX(1.2) rotate(5deg); }
+        }
+
+        .launch-pad {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 20px;
+            background: linear-gradient(to right, transparent, rgba(0, 255, 0, 0.2), rgba(0, 255, 0, 0.3), rgba(0, 255, 0, 0.2), transparent);
+            border-radius: 50% 50% 0 0;
+            box-shadow: 0 5px 20px rgba(0, 255, 0, 0.2);
+        }
+
+        .launch-smoke {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 40px;
+            background: radial-gradient(ellipse, rgba(0, 255, 0, 0.3) 0%, rgba(0, 255, 0, 0.1) 50%, transparent 70%);
+            border-radius: 50%;
+            animation: smoke-spread 6s ease-out infinite;
+            filter: blur(5px);
+        }
+
+        .smoke2 {
+            animation-delay: 0.3s;
+            transform: translateX(-60%);
+        }
+
+        .smoke3 {
+            animation-delay: 0.6s;
+            transform: translateX(-40%);
+        }
+
+        @keyframes smoke-spread {
+            0%, 30% {
+                width: 60px;
+                height: 40px;
+                opacity: 0;
+                bottom: 10px;
+            }
+            40% {
+                opacity: 0.8;
+                bottom: 15px;
+            }
+            70% {
+                width: 140px;
+                height: 80px;
+                opacity: 0.2;
+                bottom: 10px;
+            }
+            90%, 100% {
+                width: 60px;
+                height: 40px;
+                opacity: 0;
+                bottom: 10px;
+            }
+        }
+
+        .stars {
+            position: absolute;
+            inset: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #00ff00;
+            border-radius: 50%;
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
+        .star:nth-child(2) { animation-delay: 0.4s; }
+        .star:nth-child(3) { animation-delay: 0.8s; }
+        .star:nth-child(4) { animation-delay: 1.2s; }
+        .star:nth-child(5) { animation-delay: 1.6s; }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+
+        /* Progress indicators */
+        .progress-dots {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(0, 255, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            width: 24px;
+            border-radius: 4px;
+            background: #00ff00;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 25%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 40%; animation-delay: 6s;"></div>
+        <div class="particle" style="left: 55%; animation-delay: 9s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 12s;"></div>
+        <div class="particle" style="left: 85%; animation-delay: 15s;"></div>
+    </div>
+
+    <div class="slide-number">12/12</div>
+
+    <div class="container">
+        <div class="header">
+            <h1>NEXT STEPS</h1>
+            <p class="subtitle">Let's Build the Future Together</p>
+        </div>
+
+        <div class="action-cards">
+            <div class="action-card">
+                <span class="action-icon">🚀</span>
+                <h3 class="action-title">Discovery Session</h3>
+                <p class="action-desc">Deep dive into your QA workflows and identify key integration points</p>
+            </div>
+            <div class="action-card">
+                <span class="action-icon">⚡</span>
+                <h3 class="action-title">Team Alignment</h3>
+                <p class="action-desc">Collaborate to finalize project timeline and define clear actionable milestones</p>
+            </div>
+            <div class="action-card">
+                <span class="action-icon">🎯</span>
+                <h3 class="action-title">Strategic Rollout</h3>
+                <p class="action-desc">Deploy MVP internally with select partners before expanding to full ecosystem</p>
+            </div>
+        </div>
+
+        <!-- Rocket Launch Section -->
+        <div class="rocket-container">
+            <div class="rocket">
+                <div class="rocket-trail"></div>
+                <div class="rocket-body">
+                    <div class="rocket-window"></div>
+                    <div class="rocket-fin-left"></div>
+                    <div class="rocket-fin-right"></div>
+                </div>
+                <div class="rocket-flames">
+                    <div class="flame flame1"></div>
+                    <div class="flame flame2"></div>
+                    <div class="flame flame3"></div>
+                </div>
+            </div>
+            <div class="launch-pad"></div>
+            <div class="launch-smoke"></div>
+            <div class="launch-smoke smoke2"></div>
+            <div class="launch-smoke smoke3"></div>
+            <div class="stars">
+                <div class="star" style="top: 20%; left: 10%;"></div>
+                <div class="star" style="top: 30%; left: 80%;"></div>
+                <div class="star" style="top: 50%; left: 25%;"></div>
+                <div class="star" style="top: 15%; left: 60%;"></div>
+                <div class="star" style="top: 40%; left: 90%;"></div>
+            </div>
+            <div class="launch-particles">
+                <div class="particle-up" style="left: 45%;"></div>
+                <div class="particle-up" style="left: 50%; animation-delay: 0.2s;"></div>
+                <div class="particle-up" style="left: 55%; animation-delay: 0.4s;"></div>
+            </div>
+        </div>
+
+        <div class="progress-dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot active"></div>
+        </div>
+    </div>
+</body>
+</html>

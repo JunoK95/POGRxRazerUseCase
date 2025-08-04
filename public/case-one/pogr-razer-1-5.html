@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progression Intelligence - The 73% Curse</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+
+        .logo-divider {
+            color: #00ff00;
+        }
+
+        .slide-number {
+            color: #666;
+            font-size: 0.9rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Main container */
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0 60px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: slideDown 0.8s 0.2s forwards;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #ff9900;
+            text-align: center;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeIn 0.5s 0.5s forwards;
+        }
+
+        /* Main content grid */
+        .content-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            flex: 1;
+            opacity: 0;
+            animation: fadeIn 1s 0.8s forwards;
+        }
+
+        /* Flow visualization */
+        .flow-section {
+            background: rgba(255, 255, 255, 0.02);
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quest-name {
+            font-size: 1.3rem;
+            color: #ff9900;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        /* Progress bar visualization */
+        .progress-visualization {
+            position: relative;
+            height: 100px;
+            margin-bottom: 2rem;
+        }
+
+        .progress-track {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: #222;
+            border-radius: 4px;
+            transform: translateY(-50%);
+        }
+
+        .progress-fill {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            height: 8px;
+            background: linear-gradient(to right, #00ff00 0%, #00ff00 73%, #ff0000 73%, #ff0000 100%);
+            border-radius: 4px;
+            transform: translateY(-50%);
+            width: 0;
+            animation: fillProgress 3s 1s forwards;
+        }
+
+        @keyframes fillProgress {
+            to { width: 100%; }
+        }
+
+        /* Progress markers */
+        .progress-marker {
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            background: #333;
+            border: 2px solid #666;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #999;
+        }
+
+        .progress-marker.critical {
+            background: #ff0000;
+            border-color: #ff0000;
+            width: 30px;
+            height: 30px;
+            animation: criticalPulse 1s infinite;
+            z-index: 10;
+        }
+
+        @keyframes criticalPulse {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1);
+                box-shadow: 0 0 20px #ff0000;
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.2);
+                box-shadow: 0 0 40px #ff0000;
+            }
+        }
+
+        /* Player flow visualization */
+        .player-flow {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 30px;
+            display: flex;
+            align-items: center;
+        }
+
+        .player-icon {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: #00ff00;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            animation: playerMove 4s linear infinite;
+            box-shadow: 0 0 10px #00ff00;
+        }
+
+        @keyframes playerMove {
+            0% { left: -30px; }
+            73% { 
+                left: 73%; 
+                background: #00ff00;
+                box-shadow: 0 0 10px #00ff00;
+            }
+            74% { 
+                background: #ff0000;
+                box-shadow: 0 0 20px #ff0000;
+            }
+            75% { 
+                left: 73%;
+                opacity: 0;
+            }
+            100% { 
+                left: 73%;
+                opacity: 0;
+            }
+        }
+
+        .player-icon:nth-child(2) { animation-delay: 0.5s; }
+        .player-icon:nth-child(3) { animation-delay: 1s; }
+        .player-icon:nth-child(4) { animation-delay: 1.5s; }
+        .player-icon:nth-child(5) { animation-delay: 2s; }
+
+        /* Problem and solution grid */
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .analysis-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .analysis-box:hover {
+            transform: translateY(-5px);
+            border-color: #00ff00;
+            box-shadow: 0 10px 30px rgba(0, 255, 0, 0.2);
+        }
+
+        .box-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .discovery-box .box-title { color: #ff9900; }
+        .insights-box .box-title { color: #ff0000; }
+        .actions-box .box-title { color: #00ff00; }
+
+        /* Lists */
+        .insight-list, .action-list {
+            list-style: none;
+        }
+
+        .insight-item, .action-item {
+            padding: 0.4rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 0.9rem;
+            color: #ddd;
+        }
+
+        .insight-item::before {
+            content: '💀';
+            position: absolute;
+            left: 0;
+        }
+
+        .action-item::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #00ff00;
+        }
+
+        /* Death counter */
+        .death-counter {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .skull {
+            font-size: 1.5rem;
+            animation: shake 0.5s infinite;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+        }
+
+        .death-count {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff0000;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Impact metrics */
+        .impact-section {
+            background: rgba(0, 255, 0, 0.05);
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .impact-metric {
+            opacity: 0;
+            animation: fadeInUp 0.5s forwards;
+        }
+
+        .impact-metric:nth-child(1) { animation-delay: 2s; }
+        .impact-metric:nth-child(2) { animation-delay: 2.2s; }
+        .impact-metric:nth-child(3) { animation-delay: 2.4s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: #999;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #00ff00;
+            text-shadow: 0 0 20px #00ff00;
+        }
+
+        .metric-arrow {
+            color: #00ff00;
+            margin-left: 0.5rem;
+        }
+
+        /* Quote */
+        .quote {
+            text-align: center;
+            font-style: italic;
+            color: #00ff00;
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            opacity: 0;
+            animation: fadeIn 1s 3s forwards;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo-container">
+            <span>POGR</span>
+            <span class="logo-divider">×</span>
+            <span style="color: #00ff00;">RAZER</span>
+        </div>
+        <div class="slide-number">05 / 13</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <h1 class="title">USE CASE #2: PROGRESSION INTELLIGENCE</h1>
+        <p class="subtitle">Understanding the 73% Curse</p>
+        
+        <div class="content-container">
+            <!-- Flow Visualization -->
+            <div class="flow-section">
+                <div class="quest-name">"The Corrupted Grove"</div>
+                
+                <div class="progress-visualization">
+                    <!-- Player flow animation -->
+                    <div class="player-flow">
+                        <div class="player-icon">🧙</div>
+                        <div class="player-icon">⚔️</div>
+                        <div class="player-icon">🏹</div>
+                        <div class="player-icon">🛡️</div>
+                        <div class="player-icon">🗡️</div>
+                    </div>
+                    
+                    <!-- Progress track -->
+                    <div class="progress-track"></div>
+                    <div class="progress-fill"></div>
+                    
+                    <!-- Progress markers -->
+                    <div class="progress-marker" style="left: 0%;">0%</div>
+                    <div class="progress-marker" style="left: 25%;">25%</div>
+                    <div class="progress-marker" style="left: 50%;">50%</div>
+                    <div class="progress-marker critical" style="left: 73%;">73%</div>
+                    <div class="progress-marker" style="left: 100%;">100%</div>
+                </div>
+            </div>
+            
+            <!-- Analysis Grid -->
+            <div class="analysis-grid">
+                <!-- Discovery Box -->
+                <div class="analysis-box discovery-box">
+                    <h3 class="box-title">Discovery:</h3>
+                    <p style="font-size: 1.5rem; color: #ff9900; margin-bottom: 1rem;">73%</p>
+                    <p>of players abandoned at the exact same point</p>
+                </div>
+                
+                <!-- POGR Deep Dive Box -->
+                <div class="analysis-box insights-box">
+                    <h3 class="box-title">POGR Deep Dive Revealed:</h3>
+                    <div class="death-counter">
+                        <span class="skull">💀</span>
+                        <span class="death-count">11</span>
+                        <span style="color: #999;">avg deaths</span>
+                    </div>
+                    <ul class="insight-list">
+                        <li class="insight-item">Respawn point 3 minutes away</li>
+                        <li class="insight-item">Hint text rendering behind UI</li>
+                        <li class="insight-item">No poison resistance vendor</li>
+                    </ul>
+                </div>
+                
+                <!-- Developer Actions Box -->
+                <div class="analysis-box actions-box">
+                    <h3 class="box-title">Developer Actions:</h3>
+                    <ul class="action-list">
+                        <li class="action-item">Added checkpoint before pool</li>
+                        <li class="action-item">Fixed UI rendering issue</li>
+                        <li class="action-item">Added resistance vendor</li>
+                        <li class="action-item">Implemented difficulty scaling</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Impact Section -->
+            <div class="impact-section">
+                <h3 class="box-title" style="color: #00ff00; text-align: center; margin-bottom: 1.5rem;">IMPACT:</h3>
+                <div class="impact-grid">
+                    <div class="impact-metric">
+                        <div class="metric-label">Completion Rate</div>
+                        <div class="metric-value">91%<span class="metric-arrow">↑</span></div>
+                    </div>
+                    <div class="impact-metric">
+                        <div class="metric-label">Player Satisfaction</div>
+                        <div class="metric-value">+34<span style="font-size: 1rem;"> NPS</span></div>
+                    </div>
+                    <div class="impact-metric">
+                        <div class="metric-label">Quest Engagement</div>
+                        <div class="metric-value">+56%</div>
+                    </div>
+                </div>
+            </div>
+            
+            <p class="quote">"Every abandoned quest is a story. We help you read them."</p>
+        </div>
+    </div>
+
+    <script>
+        // Animate death counter
+        let deathCount = 0;
+        const deathCounter = document.querySelector('.death-count');
+        setTimeout(() => {
+            const interval = setInterval(() => {
+                if (deathCount <= 11) {
+                    deathCounter.textContent = deathCount;
+                    deathCount++;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 200);
+        }, 1500);
+
+        // Add more player icons continuously
+        setInterval(() => {
+            const playerFlow = document.querySelector('.player-flow');
+            const newPlayer = document.createElement('div');
+            newPlayer.className = 'player-icon';
+            const icons = ['🧙', '⚔️', '🏹', '🛡️', '🗡️', '🎮'];
+            newPlayer.textContent = icons[Math.floor(Math.random() * icons.length)];
+            playerFlow.appendChild(newPlayer);
+            
+            setTimeout(() => newPlayer.remove(), 4000);
+        }, 1000);
+    </script>
+</body>
+</html>

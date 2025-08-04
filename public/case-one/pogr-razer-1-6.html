@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Economy Forensics - The 50,000 Gold Sword Mystery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+
+        .logo-divider {
+            color: #00ff00;
+        }
+
+        .slide-number {
+            color: #666;
+            font-size: 0.9rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Main container */
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0 60px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: slideDown 0.8s 0.2s forwards;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #ffd700;
+            text-align: center;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeIn 0.5s 0.5s forwards;
+        }
+
+        /* Content layout */
+        .content-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            flex: 1;
+            opacity: 0;
+            animation: fadeIn 1s 0.8s forwards;
+        }
+
+        /* Left side - Timeline and Analysis */
+        .left-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Timeline */
+        .timeline-section {
+            background: rgba(255, 255, 255, 0.02);
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            color: #ffd700;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #333;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: slideInLeft 0.5s forwards;
+        }
+
+        .timeline-item:nth-child(1) { animation-delay: 1s; }
+        .timeline-item:nth-child(2) { animation-delay: 1.3s; }
+        .timeline-item:nth-child(3) { animation-delay: 1.6s; }
+        .timeline-item:nth-child(4) { animation-delay: 1.9s; }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -26px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            background: #666;
+            border-radius: 50%;
+            border: 2px solid #000;
+        }
+
+        .timeline-item.alert .timeline-dot {
+            background: #ff0000;
+            animation: alertPulse 1s infinite;
+        }
+
+        .timeline-item.action .timeline-dot {
+            background: #00ff00;
+        }
+
+        @keyframes alertPulse {
+            0%, 100% { box-shadow: 0 0 10px #ff0000; }
+            50% { box-shadow: 0 0 20px #ff0000; }
+        }
+
+        .timeline-time {
+            font-size: 0.9rem;
+            color: #999;
+            margin-bottom: 0.3rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        .timeline-text {
+            font-size: 0.95rem;
+            color: #ddd;
+        }
+
+        /* Analysis terminal */
+        .analysis-section {
+            background: #000;
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            padding: 1.5rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        .terminal-header {
+            color: #00ff00;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .code-block {
+            background: rgba(0, 255, 0, 0.05);
+            padding: 1rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #00ff00;
+            white-space: pre-wrap;
+            opacity: 0;
+            animation: typeIn 1s 2.5s forwards;
+        }
+
+        @keyframes typeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .threat-level {
+            color: #ff0000;
+            font-weight: bold;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0.5; }
+        }
+
+        /* Right side - Visualization */
+        .right-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Price distribution chart */
+        .chart-section {
+            background: rgba(255, 255, 255, 0.02);
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 1.5rem;
+            flex: 1;
+        }
+
+        .price-chart {
+            position: relative;
+            height: 250px;
+            margin-top: 1rem;
+        }
+
+        /* Chart bars */
+        .chart-bar {
+            position: absolute;
+            bottom: 0;
+            width: 40px;
+            background: rgba(0, 255, 0, 0.6);
+            border: 1px solid #00ff00;
+            border-radius: 4px 4px 0 0;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: barGrow 0.5s forwards;
+        }
+
+        .chart-bar:hover {
+            background: rgba(0, 255, 0, 0.8);
+            transform: translateY(-5px);
+        }
+
+        .chart-bar.normal { animation-delay: 1s; }
+        .chart-bar.anomaly { 
+            background: rgba(255, 0, 0, 0.8);
+            border-color: #ff0000;
+            animation-delay: 1.5s;
+        }
+
+        @keyframes barGrow {
+            from {
+                opacity: 0;
+                height: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Chart labels */
+        .chart-label {
+            position: absolute;
+            bottom: -25px;
+            font-size: 0.8rem;
+            color: #666;
+            transform: translateX(-50%);
+            left: 50%;
+        }
+
+        .price-label {
+            position: absolute;
+            top: -25px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transform: translateX(-50%);
+            left: 50%;
+        }
+
+        .normal .price-label { color: #00ff00; }
+        .anomaly .price-label { 
+            color: #ff0000;
+            animation: blink 1s infinite;
+        }
+
+        /* Resolution box */
+        .resolution-section {
+            background: rgba(0, 255, 0, 0.05);
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .resolution-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .resolution-item {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 4px;
+        }
+
+        .resolution-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00ff00;
+            margin-bottom: 0.5rem;
+        }
+
+        .resolution-label {
+            font-size: 0.9rem;
+            color: #999;
+        }
+
+        /* Floating gold coins */
+        .gold-coin {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle, #ffd700 0%, #ff9500 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #000;
+            font-size: 1.2rem;
+            opacity: 0;
+            animation: coinFloat 4s ease-in-out;
+            box-shadow: 0 0 20px #ffd700;
+        }
+
+        @keyframes coinFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(100px) rotate(0deg);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+
+        /* Warning banner */
+        .warning-banner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 0, 0, 0.9);
+            padding: 1rem 2rem;
+            border-radius: 4px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: warningFlash 1s 3s forwards;
+            z-index: 20;
+        }
+
+        @keyframes warningFlash {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo-container">
+            <span>POGR</span>
+            <span class="logo-divider">×</span>
+            <span style="color: #00ff00;">RAZER</span>
+        </div>
+        <div class="slide-number">06 / 13</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <h1 class="title">USE CASE #3: ECONOMY FORENSICS</h1>
+        <p class="subtitle">The 50,000 Gold Sword Mystery</p>
+        
+        <div class="content-container">
+            <!-- Left Section -->
+            <div class="left-section">
+                <!-- Timeline -->
+                <div class="timeline-section">
+                    <h3 class="section-title">Alert Timeline:</h3>
+                    <div class="timeline">
+                        <div class="timeline-item alert">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-time">2:34 AM</div>
+                            <div class="timeline-text">Rare sword listed for 50,000 gold (normal: 500)</div>
+                        </div>
+                        <div class="timeline-item alert">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-time">2:41 AM</div>
+                            <div class="timeline-text">17 similar listings appear</div>
+                        </div>
+                        <div class="timeline-item action">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-time">2:45 AM</div>
+                            <div class="timeline-text">Pogr flags statistical impossibility</div>
+                        </div>
+                        <div class="timeline-item action">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-time">2:47 AM</div>
+                            <div class="timeline-text">Automated investigation begins</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Analysis Terminal -->
+                <div class="analysis-section">
+                    <div class="terminal-header">POGR's Automated Analysis:</div>
+                    <div class="code-block">Anomaly Details:
+- Accounts created: Last 48 hours
+- IP correlation: 94% match
+- Gameplay pattern: Bot-like
+- Gold source: Exploited vendor bug
+- Threat level: <span class="threat-level">ECONOMY-CRITICAL</span></div>
+                </div>
+            </div>
+            
+            <!-- Right Section -->
+            <div class="right-section">
+                <!-- Price Distribution Chart -->
+                <div class="chart-section">
+                    <h3 class="section-title">Price Distribution Anomaly</h3>
+                    <div class="price-chart">
+                        <!-- Normal price bars -->
+                        <div class="chart-bar normal" style="left: 10%; height: 120px;">
+                            <div class="price-label">300g</div>
+                            <div class="chart-label">Common</div>
+                        </div>
+                        <div class="chart-bar normal" style="left: 30%; height: 150px;">
+                            <div class="price-label">500g</div>
+                            <div class="chart-label">Normal</div>
+                        </div>
+                        <div class="chart-bar normal" style="left: 50%; height: 100px;">
+                            <div class="price-label">800g</div>
+                            <div class="chart-label">Rare</div>
+                        </div>
+                        <!-- Anomaly bar -->
+                        <div class="chart-bar anomaly" style="left: 75%; height: 220px;">
+                            <div class="price-label">50,000g</div>
+                            <div class="chart-label">ANOMALY</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Resolution -->
+                <div class="resolution-section">
+                    <h3 class="section-title" style="color: #00ff00;">Resolution:</h3>
+                    <div class="resolution-grid">
+                        <div class="resolution-item">
+                            <div class="resolution-number">13</div>
+                            <div class="resolution-label">Minutes to Freeze</div>
+                        </div>
+                        <div class="resolution-item">
+                            <div class="resolution-number">1</div>
+                            <div class="resolution-label">Day to Patch</div>
+                        </div>
+                        <div class="resolution-item">
+                            <div class="resolution-number">$2.4M</div>
+                            <div class="resolution-label">Loss Prevented</div>
+                        </div>
+                        <div class="resolution-item">
+                            <div class="resolution-number">0</div>
+                            <div class="resolution-label">Economy Impact</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Warning Banner -->
+        <div class="warning-banner">EXPLOIT DETECTED</div>
+    </div>
+
+    <script>
+        // Generate floating gold coins
+        setInterval(() => {
+            const coin = document.createElement('div');
+            coin.className = 'gold-coin';
+            coin.textContent = '$';
+            coin.style.left = Math.random() * window.innerWidth + 'px';
+            coin.style.animationDelay = Math.random() * 2 + 's';
+            document.body.appendChild(coin);
+            
+            setTimeout(() => coin.remove(), 4000);
+        }, 500);
+
+        // Animate resolution numbers
+        setTimeout(() => {
+            const numbers = document.querySelectorAll('.resolution-number');
+            numbers[0].style.animation = 'pulse 1s infinite';
+            numbers[2].style.animation = 'glow 2s infinite';
+        }, 3000);
+
+        // Add style for glow animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes glow {
+                0%, 100% { text-shadow: 0 0 10px #00ff00; }
+                50% { text-shadow: 0 0 20px #00ff00, 0 0 30px #00ff00; }
+            }
+            @keyframes pulse {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.1); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

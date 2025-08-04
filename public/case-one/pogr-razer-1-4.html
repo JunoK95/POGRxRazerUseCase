@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anomaly Detection - The New World Incident</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+
+        .logo-divider {
+            color: #00ff00;
+        }
+
+        .slide-number {
+            color: #666;
+            font-size: 0.9rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Main container */
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0 60px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: slideDown 0.8s 0.2s forwards;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #ff3333;
+            text-align: center;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: warningPulse 2s 0.5s infinite, fadeIn 0.5s 0.5s forwards;
+        }
+
+        @keyframes warningPulse {
+            0%, 100% { text-shadow: 0 0 10px #ff3333; }
+            50% { text-shadow: 0 0 20px #ff3333, 0 0 30px #ff3333; }
+        }
+
+        /* Content grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            flex: 1;
+            opacity: 0;
+            animation: fadeIn 1s 0.8s forwards;
+        }
+
+        /* Heat map section */
+        .heatmap-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            color: #00ff00;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .heatmap-container {
+            flex: 1;
+            background: #0a0a0a;
+            border: 2px solid #333;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+        }
+
+        /* Heat map visualization */
+        .heatmap {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, transparent 0%, #001100 100%);
+        }
+
+        .heat-spot {
+            position: absolute;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .heat-spot.normal {
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(0, 255, 0, 0.8) 0%, transparent 70%);
+        }
+
+        .heat-spot.critical {
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, #ff0000 0%, #ff6600 30%, transparent 70%);
+            top: 40%;
+            left: 60%;
+            animation: criticalPulse 1s infinite;
+        }
+
+        @keyframes criticalPulse {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 0 30px #ff0000;
+            }
+            50% { 
+                transform: scale(1.2);
+                box-shadow: 0 0 50px #ff0000, 0 0 100px #ff6600;
+            }
+        }
+
+        /* Location label */
+        .location-label {
+            position: absolute;
+            top: 38%;
+            left: 62%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 0, 0, 0.9);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0.5; }
+        }
+
+        /* Stats overlay */
+        .stats-overlay {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #00ff00;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .stat-line {
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        .stat-label {
+            color: #999;
+        }
+
+        .stat-value {
+            color: #00ff00;
+            font-weight: bold;
+        }
+
+        .stat-value.critical {
+            color: #ff0000;
+            animation: blink 0.5s infinite;
+        }
+
+        /* Alert section */
+        .alert-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Problem box */
+        .problem-box, .solution-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .problem-box {
+            border-color: #ff3333;
+            background: rgba(255, 0, 0, 0.05);
+        }
+
+        .solution-box {
+            border-color: #00ff00;
+            background: rgba(0, 255, 0, 0.05);
+        }
+
+        .box-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .problem-box .box-title {
+            color: #ff3333;
+        }
+
+        .solution-box .box-title {
+            color: #00ff00;
+        }
+
+        /* Problem list */
+        .problem-list {
+            list-style: none;
+        }
+
+        .problem-item {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: #ddd;
+        }
+
+        .problem-item::before {
+            content: '⚠️';
+            position: absolute;
+            left: 0;
+        }
+
+        /* Alert terminal */
+        .alert-terminal {
+            background: #000;
+            border: 1px solid #00ff00;
+            border-radius: 4px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: #00ff00;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .terminal-header {
+            color: #999;
+            margin-bottom: 0.5rem;
+        }
+
+        .alert-line {
+            margin-bottom: 0.3rem;
+            opacity: 0;
+            animation: typeIn 0.5s forwards;
+        }
+
+        .alert-line:nth-child(2) { animation-delay: 0.5s; }
+        .alert-line:nth-child(3) { animation-delay: 1s; }
+        .alert-line:nth-child(4) { animation-delay: 1.5s; }
+        .alert-line:nth-child(5) { animation-delay: 2s; }
+        .alert-line:nth-child(6) { animation-delay: 2.5s; }
+
+        @keyframes typeIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Results comparison */
+        .results-box {
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .comparison-item {
+            text-align: center;
+        }
+
+        .comparison-label {
+            font-size: 0.9rem;
+            color: #999;
+            margin-bottom: 0.5rem;
+        }
+
+        .comparison-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00ff00;
+        }
+
+        .comparison-item.bad .comparison-value {
+            color: #ff3333;
+        }
+
+        /* Bottom ticker */
+        .ticker {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 255, 0, 0.1);
+            border-top: 1px solid #00ff00;
+            border-bottom: 1px solid #00ff00;
+            padding: 0.5rem;
+            overflow: hidden;
+        }
+
+        .ticker-content {
+            display: inline-block;
+            white-space: nowrap;
+            animation: scroll 20s linear infinite;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        @keyframes scroll {
+            from { transform: translateX(100%); }
+            to { transform: translateX(-100%); }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo-container">
+            <span>POGR</span>
+            <span class="logo-divider">×</span>
+            <span style="color: #00ff00;">RAZER</span>
+        </div>
+        <div class="slide-number">04 / 13</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <h1 class="title">USE CASE #1: ANOMALY DETECTION</h1>
+        <p class="subtitle">The New World Incident That Changed Everything</p>
+        
+        <div class="content-grid">
+            <!-- Heat Map Section -->
+            <div class="heatmap-section">
+                <h2 class="section-title">Live Player Density Map</h2>
+                <div class="heatmap-container">
+                    <div class="heatmap"></div>
+                    
+                    <!-- Normal activity spots -->
+                    <div class="heat-spot normal" style="top: 20%; left: 30%;"></div>
+                    <div class="heat-spot normal" style="top: 60%; left: 20%;"></div>
+                    <div class="heat-spot normal" style="top: 80%; left: 50%;"></div>
+                    <div class="heat-spot normal" style="top: 30%; left: 80%;"></div>
+                    
+                    <!-- Critical anomaly -->
+                    <div class="heat-spot critical"></div>
+                    <div class="location-label">EVERFALL [271, 1847]</div>
+                    
+                    <!-- Stats overlay -->
+                    <div class="stats-overlay">
+                        <div class="stat-line">
+                            <span class="stat-label">Players:</span>
+                            <span class="stat-value critical">3,147</span>
+                        </div>
+                        <div class="stat-line">
+                            <span class="stat-label">Density:</span>
+                            <span class="stat-value critical">847% ↑</span>
+                        </div>
+                        <div class="stat-line">
+                            <span class="stat-label">Kill Rate:</span>
+                            <span class="stat-value critical">14K/min</span>
+                        </div>
+                        <div class="stat-line">
+                            <span class="stat-label">Status:</span>
+                            <span class="stat-value critical">CRITICAL</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Alert Section -->
+            <div class="alert-section">
+                <!-- The Problem -->
+                <div class="problem-box">
+                    <h3 class="box-title">The Problem:</h3>
+                    <ul class="problem-list">
+                        <li class="problem-item">Infinitely respawning boar discovered</li>
+                        <li class="problem-item">3,000+ players farming one location</li>
+                        <li class="problem-item">Economy destroyed in 6 hours</li>
+                        <li class="problem-item"><strong>Cost: 2-week rollback, 40% player loss</strong></li>
+                    </ul>
+                </div>
+                
+                <!-- The Solution -->
+                <div class="solution-box">
+                    <h3 class="box-title">The POGR Solution:</h3>
+                    <div class="alert-terminal">
+                        <div class="terminal-header">[POGR ANOMALY DETECTION v3.2.1]</div>
+                        <div class="alert-line">ALERT: Abnormal player clustering detected</div>
+                        <div class="alert-line">- Location: Everfall [coordinates]</div>
+                        <div class="alert-line">- Player density: 847% above normal</div>
+                        <div class="alert-line">- Kill rate: 14,000 boars/minute</div>
+                        <div class="alert-line">- Economic impact: CRITICAL</div>
+                        <div class="alert-line">[AUTO-FLAGGED TO QA TEAM]</div>
+                    </div>
+                </div>
+                
+                <!-- Results -->
+                <div class="results-box">
+                    <h3 class="box-title" style="color: #00ff00;">Results with POGR:</h3>
+                    <div class="comparison-grid">
+                        <div class="comparison-item">
+                            <div class="comparison-label">Detection Time</div>
+                            <div class="comparison-value">4 MIN</div>
+                        </div>
+                        <div class="comparison-item bad">
+                            <div class="comparison-label">Without POGR</div>
+                            <div class="comparison-value">6 HRS</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-label">Players Saved</div>
+                            <div class="comparison-value">400K+</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-label">Rollback Avoided</div>
+                            <div class="comparison-value">YES</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bottom ticker -->
+    <div class="ticker">
+        <div class="ticker-content">
+            Currently monitoring 847 games for similar anomalies in real-time • Detection accuracy: 99.7% • False positive rate: <0.1% • Average response time: 4.2 minutes • 
+        </div>
+    </div>
+
+    <script>
+        // Add more dynamic heat spots
+        setInterval(() => {
+            const heatmap = document.querySelector('.heatmap');
+            const spot = document.createElement('div');
+            spot.className = 'heat-spot normal';
+            spot.style.top = Math.random() * 100 + '%';
+            spot.style.left = Math.random() * 100 + '%';
+            spot.style.animationDuration = (2 + Math.random() * 2) + 's';
+            heatmap.appendChild(spot);
+            
+            setTimeout(() => spot.remove(), 4000);
+        }, 2000);
+
+        // Animate stats
+        let playerCount = 100;
+        const playerStat = document.querySelector('.stat-value.critical');
+        setInterval(() => {
+            if (playerCount < 3147) {
+                playerCount += Math.floor(Math.random() * 200);
+                if (playerCount > 3147) playerCount = 3147;
+                playerStat.textContent = playerCount.toLocaleString();
+            }
+        }, 100);
+    </script>
+</body>
+</html>

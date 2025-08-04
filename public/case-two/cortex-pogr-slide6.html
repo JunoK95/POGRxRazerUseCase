@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Player Profile - Your Gaming DNA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        /* Main Container */
+        .slide-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: 
+                radial-gradient(ellipse at center, rgba(0, 255, 0, 0.05) 0%, transparent 70%),
+                #000;
+        }
+
+        /* DNA Strands Background */
+        .dna-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            overflow: hidden;
+        }
+
+        .dna-strand {
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, #00ff00, transparent);
+            animation: dnaFloat 20s linear infinite;
+        }
+
+        @keyframes dnaFloat {
+            0% { transform: translateY(-100%) rotate(0deg); }
+            100% { transform: translateY(100%) rotate(360deg); }
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 50px 20px 30px;
+            z-index: 10;
+        }
+
+        .header h1 {
+            font-size: 56px;
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #00ff00, #00ffaa, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 5s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { filter: hue-rotate(0deg); }
+            50% { filter: hue-rotate(20deg); }
+        }
+
+        .header p {
+            font-size: 24px;
+            color: #999;
+            font-weight: 300;
+        }
+
+        /* Profile Container */
+        .profile-container {
+            flex: 1;
+            display: flex;
+            padding: 0 60px 60px;
+            gap: 40px;
+            position: relative;
+        }
+
+        /* Left Panel - Gaming DNA */
+        .dna-panel {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* DNA Visualization */
+        .dna-visual {
+            width: 400px;
+            height: 400px;
+            position: relative;
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* DNA Hexagon */
+        .dna-hexagon {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px solid #00ff00;
+        }
+
+        /* DNA Traits */
+        .dna-trait {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #00ff00;
+            border-radius: 15px;
+            padding: 15px;
+            transition: all 0.3s ease;
+            animation: traitPulse 3s ease-in-out infinite;
+        }
+
+        .dna-trait:hover {
+            transform: scale(1.1);
+            z-index: 10;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+        }
+
+        @keyframes traitPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .trait-icon {
+            font-size: 36px;
+            margin-bottom: 8px;
+        }
+
+        .trait-value {
+            font-size: 24px;
+            font-weight: 900;
+            color: #00ff00;
+            margin-bottom: 4px;
+        }
+
+        .trait-label {
+            font-size: 11px;
+            color: #999;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        /* Trait Positions */
+        .trait-1 { top: -60px; left: 50%; transform: translateX(-50%); animation-delay: 0s; }
+        .trait-2 { top: 20%; right: -60px; animation-delay: 0.5s; }
+        .trait-3 { bottom: 20%; right: -60px; animation-delay: 1s; }
+        .trait-4 { bottom: -60px; left: 50%; transform: translateX(-50%); animation-delay: 1.5s; }
+        .trait-5 { bottom: 20%; left: -60px; animation-delay: 2s; }
+        .trait-6 { top: 20%; left: -60px; animation-delay: 2.5s; }
+
+        /* Center Profile */
+        .center-profile {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid #00ff00;
+        }
+
+        .player-avatar {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #00ff00, #00ff88);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+        }
+
+        .player-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .player-title {
+            font-size: 16px;
+            color: #00ff00;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        /* Right Panel - Stats & Progression */
+        .stats-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Cross-Game Stats */
+        .cross-game-stats {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff00;
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            animation: slideInRight 0.8s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .stats-header {
+            font-size: 20px;
+            font-weight: 700;
+            color: #00ff00;
+            margin-bottom: 20px;
+        }
+
+        .game-stat-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(0, 255, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .game-stat-row:hover {
+            background: rgba(0, 255, 0, 0.05);
+            margin: 0 -15px;
+            padding: 15px;
+        }
+
+        .game-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 255, 0, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .game-details {
+            flex: 1;
+        }
+
+        .game-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .game-rank {
+            font-size: 14px;
+            color: #999;
+        }
+
+        .game-performance {
+            text-align: right;
+        }
+
+        .performance-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #00ff00;
+        }
+
+        .performance-label {
+            font-size: 12px;
+            color: #999;
+        }
+
+        /* Progression Tree */
+        .progression-tree {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff00;
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            animation: slideInRight 0.8s ease-out 0.2s both;
+            flex: 1;
+        }
+
+        .tree-nodes {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .tree-node {
+            width: 80px;
+            height: 80px;
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px solid #00ff00;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .tree-node.unlocked {
+            background: rgba(0, 255, 0, 0.2);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+        }
+
+        .tree-node:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.7);
+        }
+
+        .node-icon {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .node-level {
+            font-size: 12px;
+            font-weight: 700;
+            color: #00ff00;
+        }
+
+        /* Connection Lines */
+        .tree-connection {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ff00, transparent);
+            width: 100px;
+            top: 50%;
+            left: 100%;
+            transform: translateY(-50%);
+        }
+
+        /* Hardware Correlation */
+        .hardware-badge {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #001a00, #003300);
+            border: 2px solid #00ff00;
+            border-radius: 15px;
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            animation: slideUp 0.8s ease-out 0.4s both;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hardware-icon {
+            font-size: 32px;
+        }
+
+        .hardware-text {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .hardware-value {
+            color: #00ff00;
+            font-weight: 700;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #00ff00;
+            border-radius: 30px;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #00ff00;
+            letter-spacing: 1px;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 0, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(0, 255, 0, 0.8); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .profile-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .dna-visual {
+                width: 300px;
+                height: 300px;
+            }
+            .dna-trait {
+                width: 100px;
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Slide Container -->
+    <div class="slide-container">
+        <!-- DNA Background -->
+        <div class="dna-bg">
+            <div class="dna-strand" style="left: 10%; animation-delay: 0s;"></div>
+            <div class="dna-strand" style="left: 30%; animation-delay: 5s;"></div>
+            <div class="dna-strand" style="left: 50%; animation-delay: 10s;"></div>
+            <div class="dna-strand" style="left: 70%; animation-delay: 15s;"></div>
+            <div class="dna-strand" style="left: 90%; animation-delay: 20s;"></div>
+        </div>
+
+        <!-- Header -->
+        <div class="header">
+            <h1>One Identity. Infinite Games.</h1>
+            <p>Your Gaming DNA</p>
+        </div>
+
+        <!-- Profile Container -->
+        <div class="profile-container">
+            <!-- Gaming DNA Panel -->
+            <div class="dna-panel">
+                <div class="dna-visual">
+                    <!-- DNA Hexagon -->
+                    <div class="dna-hexagon"></div>
+                    
+                    <!-- DNA Traits -->
+                    <div class="dna-trait trait-1">
+                        <div class="trait-icon">⚔️</div>
+                        <div class="trait-value">87%</div>
+                        <div class="trait-label">Aggressive</div>
+                    </div>
+                    <div class="dna-trait trait-2">
+                        <div class="trait-icon">🎯</div>
+                        <div class="trait-value">94%</div>
+                        <div class="trait-label">Precision</div>
+                    </div>
+                    <div class="dna-trait trait-3">
+                        <div class="trait-icon">🧠</div>
+                        <div class="trait-value">76%</div>
+                        <div class="trait-label">Strategic</div>
+                    </div>
+                    <div class="dna-trait trait-4">
+                        <div class="trait-icon">⚡</div>
+                        <div class="trait-value">92%</div>
+                        <div class="trait-label">Reflexes</div>
+                    </div>
+                    <div class="dna-trait trait-5">
+                        <div class="trait-icon">🤝</div>
+                        <div class="trait-value">68%</div>
+                        <div class="trait-label">Team Play</div>
+                    </div>
+                    <div class="dna-trait trait-6">
+                        <div class="trait-icon">🏃</div>
+                        <div class="trait-value">85%</div>
+                        <div class="trait-label">Mobility</div>
+                    </div>
+                    
+                    <!-- Center Profile -->
+                    <div class="center-profile">
+                        <div class="player-avatar">👤</div>
+                        <div class="player-name">RazerElite</div>
+                        <div class="player-title">DIAMOND RAZER GAMER</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Panel -->
+            <div class="stats-panel">
+                <!-- Cross-Game Stats -->
+                <div class="cross-game-stats">
+                    <h3 class="stats-header">Cross-Game Performance</h3>
+                    
+                    <div class="game-stat-row">
+                        <div class="game-icon">🎮</div>
+                        <div class="game-details">
+                            <div class="game-name">Valorant</div>
+                            <div class="game-rank">Immortal 3</div>
+                        </div>
+                        <div class="game-performance">
+                            <div class="performance-value">2.47</div>
+                            <div class="performance-label">K/D Ratio</div>
+                        </div>
+                    </div>
+                    
+                    <div class="game-stat-row">
+                        <div class="game-icon">🎯</div>
+                        <div class="game-details">
+                            <div class="game-name">CS:GO 2</div>
+                            <div class="game-rank">Global Elite</div>
+                        </div>
+                        <div class="game-performance">
+                            <div class="performance-value">1.89</div>
+                            <div class="performance-label">K/D Ratio</div>
+                        </div>
+                    </div>
+                    
+                    <div class="game-stat-row">
+                        <div class="game-icon">⚔️</div>
+                        <div class="game-details">
+                            <div class="game-name">League of Legends</div>
+                            <div class="game-rank">Master</div>
+                        </div>
+                        <div class="game-performance">
+                            <div class="performance-value">67%</div>
+                            <div class="performance-label">Win Rate</div>
+                        </div>
+                    </div>
+                    
+                    <div class="game-stat-row">
+                        <div class="game-icon">🏃</div>
+                        <div class="game-details">
+                            <div class="game-name">Apex Legends</div>
+                            <div class="game-rank">Predator</div>
+                        </div>
+                        <div class="game-performance">
+                            <div class="performance-value">4.2K</div>
+                            <div class="performance-label">Avg Damage</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progression Tree -->
+                <div class="progression-tree">
+                    <h3 class="stats-header">Skill Progression</h3>
+                    
+                    <div class="tree-nodes">
+                        <div class="tree-node unlocked">
+                            <div class="node-icon">🎯</div>
+                            <div class="node-level">MAX</div>
+                            <div class="tree-connection"></div>
+                        </div>
+                        <div class="tree-node unlocked">
+                            <div class="node-icon">⚡</div>
+                            <div class="node-level">Lv.8</div>
+                            <div class="tree-connection"></div>
+                        </div>
+                        <div class="tree-node">
+                            <div class="node-icon">🧠</div>
+                            <div class="node-level">Lv.6</div>
+                            <div class="tree-connection"></div>
+                        </div>
+                        <div class="tree-node">
+                            <div class="node-icon">🏆</div>
+                            <div class="node-level">???</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hardware Correlation Badge -->
+        <div class="hardware-badge">
+            <div class="hardware-icon">🖱️</div>
+            <div class="hardware-text">
+                Your accuracy peaks at <span class="hardware-value">1600 DPI</span><br>
+                with Razer DeathAdder V3
+            </div>
+        </div>
+
+        <!-- Status Badge -->
+        <div class="status-badge">
+            💎 DIAMOND STATUS
+        </div>
+    </div>
+
+    <script>
+        // DNA Trait animations
+        const traits = document.querySelectorAll('.dna-trait');
+        
+        traits.forEach((trait, index) => {
+            trait.addEventListener('mouseenter', () => {
+                // Highlight connected traits
+                const value = parseFloat(trait.querySelector('.trait-value').textContent);
+                traits.forEach(otherTrait => {
+                    if (otherTrait !== trait) {
+                        otherTrait.style.opacity = '0.5';
+                    }
+                });
+                
+                // Create connection lines
+                const visual = document.querySelector('.dna-visual');
+                const line = document.createElement('div');
+                line.className = 'trait-connection';
+                line.style.cssText = `
+                    position: absolute;
+                    background: rgba(0, 255, 0, 0.3);
+                    height: 2px;
+                    width: 200px;
+                    top: 50%;
+                    left: 50%;
+                    transform-origin: left center;
+                    transform: rotate(${index * 60}deg);
+                `;
+                visual.appendChild(line);
+            });
+            
+            trait.addEventListener('mouseleave', () => {
+                traits.forEach(otherTrait => {
+                    otherTrait.style.opacity = '1';
+                });
+                
+                // Remove connection lines
+                document.querySelectorAll('.trait-connection').forEach(line => line.remove());
+            });
+        });
+
+        // Animate trait values
+        function animateTraitValue(trait) {
+            const valueEl = trait.querySelector('.trait-value');
+            const currentValue = parseFloat(valueEl.textContent);
+            const change = (Math.random() - 0.5) * 5;
+            const newValue = Math.max(0, Math.min(100, currentValue + change));
+            
+            valueEl.style.transform = 'scale(1.2)';
+            valueEl.style.color = change > 0 ? '#00ff00' : '#ff6600';
+            
+            setTimeout(() => {
+                valueEl.textContent = Math.round(newValue) + '%';
+                valueEl.style.transform = 'scale(1)';
+                valueEl.style.color = '#00ff00';
+            }, 300);
+        }
+
+        // Randomly update traits
+        setInterval(() => {
+            const randomTrait = traits[Math.floor(Math.random() * traits.length)];
+            if (Math.random() > 0.7) {
+                animateTraitValue(randomTrait);
+            }
+        }, 3000);
+
+        // Game stat row interactions
+        const gameRows = document.querySelectorAll('.game-stat-row');
+        
+        gameRows.forEach(row => {
+            row.addEventListener('click', () => {
+                // Flash effect
+                row.style.background = 'rgba(0, 255, 0, 0.2)';
+                setTimeout(() => {
+                    row.style.background = '';
+                }, 300);
+                
+                // Update performance value
+                const perfValue = row.querySelector('.performance-value');
+                perfValue.style.transform = 'scale(1.3)';
+                setTimeout(() => {
+                    perfValue.style.transform = 'scale(1)';
+                }, 300);
+            });
+        });
+
+        // Progression tree animations
+        const treeNodes = document.querySelectorAll('.tree-node');
+        let unlockedCount = 2;
+        
+        setInterval(() => {
+            if (unlockedCount < treeNodes.length && Math.random() > 0.8) {
+                const node = treeNodes[unlockedCount];
+                node.classList.add('unlocked');
+                
+                // Flash effect
+                node.style.animation = 'none';
+                setTimeout(() => {
+                    node.style.animation = 'glow 0.5s ease-out';
+                }, 10);
+                
+                unlockedCount++;
+            }
+        }, 5000);
+
+        // DNA rotation
+        const dnaVisual = document.querySelector('.dna-visual');
+        let isPaused = false;
+        
+        dnaVisual.addEventListener('mouseenter', () => {
+            isPaused = true;
+            dnaVisual.style.animationPlayState = 'paused';
+        });
+        
+        dnaVisual.addEventListener('mouseleave', () => {
+            isPaused = false;
+            dnaVisual.style.animationPlayState = 'running';
+        });
+
+        // Status badge glow effect
+        const statusBadge = document.querySelector('.status-badge');
+        
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                statusBadge.style.animation = 'none';
+                setTimeout(() => {
+                    statusBadge.style.animation = 'glow 2s ease-in-out infinite';
+                }, 10);
+            }
+        }, 4000);
+    </script>
+</body>
+</html>

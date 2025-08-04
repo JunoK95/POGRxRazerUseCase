@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esports Excellence - From Casual to Champion</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+
+        .logo-divider {
+            color: #00ff00;
+        }
+
+        .slide-number {
+            color: #666;
+            font-size: 0.9rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Main container */
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0 60px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: slideDown 0.8s 0.2s forwards;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            background: linear-gradient(90deg, #00ff00, #ffd700, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeIn 0.5s 0.5s forwards;
+        }
+
+        /* Main content */
+        .content-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            flex: 1;
+            opacity: 0;
+            animation: fadeIn 1s 0.8s forwards;
+        }
+
+        /* Journey timeline */
+        .journey-section {
+            background: rgba(255, 255, 255, 0.02);
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 2rem;
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        /* Progress line */
+        .progress-line {
+            position: absolute;
+            top: 50%;
+            left: 5%;
+            right: 5%;
+            height: 4px;
+            background: #222;
+            transform: translateY(-50%);
+        }
+
+        .progress-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(90deg, #00ff00 0%, #ffd700 50%, #ff00ff 100%);
+            width: 0;
+            animation: fillProgress 3s 1s ease-out forwards;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        @keyframes fillProgress {
+            to { width: 100%; }
+        }
+
+        /* Milestone markers */
+        .milestone {
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: #111;
+            border: 3px solid #666;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .milestone:hover {
+            transform: translate(-50%, -50%) scale(1.2);
+            border-color: #00ff00;
+            box-shadow: 0 0 20px #00ff00;
+        }
+
+        .milestone.active {
+            background: #00ff00;
+            border-color: #00ff00;
+            animation: milestonePulse 2s infinite;
+        }
+
+        @keyframes milestonePulse {
+            0%, 100% { box-shadow: 0 0 20px #00ff00; }
+            50% { box-shadow: 0 0 40px #00ff00, 0 0 60px #00ff00; }
+        }
+
+        .milestone-icon {
+            font-size: 1.5rem;
+        }
+
+        .milestone-label {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: #999;
+            white-space: nowrap;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+
+        .milestone:nth-child(1) { left: 10%; animation-delay: 1.2s; }
+        .milestone:nth-child(2) { left: 30%; animation-delay: 1.5s; }
+        .milestone:nth-child(3) { left: 50%; animation-delay: 1.8s; }
+        .milestone:nth-child(4) { left: 70%; animation-delay: 2.1s; }
+        .milestone:nth-child(5) { left: 90%; animation-delay: 2.4s; }
+
+        /* Info panels */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        /* Player Analytics */
+        .analytics-panel {
+            background: rgba(255, 255, 255, 0.02);
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .analytics-panel:hover {
+            border-color: #00ff00;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+        }
+
+        .panel-title {
+            font-size: 1.2rem;
+            color: #00ff00;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-item {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: #ddd;
+        }
+
+        .feature-item::before {
+            content: '📊';
+            position: absolute;
+            left: 0;
+        }
+
+        /* Success story */
+        .success-story {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 0, 255, 0.1));
+            border: 2px solid #ffd700;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .team-name {
+            font-size: 1.5rem;
+            color: #ffd700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .trophy {
+            font-size: 2rem;
+            animation: trophySpin 3s infinite ease-in-out;
+        }
+
+        @keyframes trophySpin {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        /* Stats grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-box {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1rem;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #999;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .improvement-arrow {
+            color: #00ff00;
+            margin-left: 0.5rem;
+        }
+
+        /* Data improvements */
+        .improvement-list {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .improvement-item {
+            padding: 0.3rem 0;
+            color: #00ff00;
+        }
+
+        /* Razer synergy */
+        .synergy-box {
+            background: linear-gradient(135deg, rgba(0, 255, 0, 0.1), rgba(0, 255, 0, 0.05));
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .synergy-title {
+            font-size: 1.3rem;
+            color: #00ff00;
+            margin-bottom: 1rem;
+        }
+
+        .synergy-text {
+            font-style: italic;
+            color: #ddd;
+            font-size: 1.1rem;
+        }
+
+        /* Performance radar */
+        .radar-container {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            width: 150px;
+            height: 150px;
+            opacity: 0.3;
+        }
+
+        .radar-ring {
+            position: absolute;
+            border: 1px solid #333;
+            border-radius: 50%;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .radar-ring:nth-child(1) { width: 30px; height: 30px; }
+        .radar-ring:nth-child(2) { width: 60px; height: 60px; }
+        .radar-ring:nth-child(3) { width: 90px; height: 90px; }
+        .radar-ring:nth-child(4) { width: 120px; height: 120px; }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ffd700;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: floatUp 5s linear infinite;
+        }
+
+        @keyframes floatUp {
+            from {
+                opacity: 0;
+                transform: translateY(100px);
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-100px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo-container">
+            <span>POGR</span>
+            <span class="logo-divider">×</span>
+            <span style="color: #00ff00;">RAZER</span>
+        </div>
+        <div class="slide-number">08 / 13</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <h1 class="title">USE CASE #5: ESPORTS EXCELLENCE</h1>
+        <p class="subtitle">From Casual to Champion: The Data Journey</p>
+        
+        <div class="content-container">
+            <!-- Journey Timeline -->
+            <div class="journey-section">
+                <div class="progress-line">
+                    <div class="progress-fill"></div>
+                </div>
+                
+                <!-- Milestones -->
+                <div class="milestone">
+                    <span class="milestone-icon">🎮</span>
+                    <span class="milestone-label">First Match</span>
+                </div>
+                <div class="milestone">
+                    <span class="milestone-icon">📈</span>
+                    <span class="milestone-label">Skill Plateau</span>
+                </div>
+                <div class="milestone active">
+                    <span class="milestone-icon">🔍</span>
+                    <span class="milestone-label">POGR Analysis</span>
+                </div>
+                <div class="milestone">
+                    <span class="milestone-icon">🚀</span>
+                    <span class="milestone-label">Rapid Growth</span>
+                </div>
+                <div class="milestone">
+                    <span class="milestone-icon">🏆</span>
+                    <span class="milestone-label">Champion</span>
+                </div>
+                
+                <!-- Performance radar -->
+                <div class="radar-container">
+                    <div class="radar-ring"></div>
+                    <div class="radar-ring"></div>
+                    <div class="radar-ring"></div>
+                    <div class="radar-ring"></div>
+                </div>
+            </div>
+            
+            <!-- Info Grid -->
+            <div class="info-grid">
+                <!-- Left Panel - Analytics Features -->
+                <div>
+                    <div class="analytics-panel">
+                        <h3 class="panel-title">Individual Player Analytics:</h3>
+                        <ul class="feature-list">
+                            <li class="feature-item">Skill progression curves with AI recommendations</li>
+                            <li class="feature-item">Optimal practice patterns based on performance</li>
+                            <li class="feature-item">Performance pattern analysis across 100+ metrics</li>
+                            <li class="feature-item">Hardware impact correlation (perfect for Razer!)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="analytics-panel" style="margin-top: 1rem;">
+                        <h3 class="panel-title">Tournament Organizer Tools:</h3>
+                        <ul class="feature-list">
+                            <li class="feature-item">Real-time match statistics & visualization</li>
+                            <li class="feature-item">Audience engagement metrics</li>
+                            <li class="feature-item">Betting integrity monitoring</li>
+                            <li class="feature-item">Broadcast optimization data</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Right Panel - Success Story -->
+                <div>
+                    <div class="success-story">
+                        <h3 class="team-name">
+                            <span class="trophy">🏆</span>
+                            Sentinels Championship Run
+                        </h3>
+                        
+                        <div class="stats-grid">
+                            <div class="stat-box">
+                                <div class="stat-label">Win Rate Before</div>
+                                <div class="stat-value">73%</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Win Rate After</div>
+                                <div class="stat-value">84%<span class="improvement-arrow">↑</span></div>
+                            </div>
+                        </div>
+                        
+                        <div class="improvement-list">
+                            <div>Data-Driven Improvements:</div>
+                            <div class="improvement-item">- Identified economy management weakness</div>
+                            <div class="improvement-item">- Revealed opponent patterns via demos</div>
+                            <div class="improvement-item">- Optimized team composition strategies</div>
+                            <div class="improvement-item">- Result: Championship Victory 🏆</div>
+                        </div>
+                    </div>
+                    
+                    <div class="synergy-box">
+                        <h3 class="synergy-title">Razer Synergy Opportunity:</h3>
+                        <p class="synergy-text">"Imagine correlating this performance data with Razer peripherals usage..."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add floating particles
+        setInterval(() => {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * window.innerWidth + 'px';
+            particle.style.animationDelay = Math.random() * 2 + 's';
+            particle.style.animationDuration = (4 + Math.random() * 2) + 's';
+            document.body.appendChild(particle);
+            
+            setTimeout(() => particle.remove(), 6000);
+        }, 300);
+
+        // Interactive milestones
+        const milestones = document.querySelectorAll('.milestone');
+        milestones.forEach((milestone, index) => {
+            milestone.addEventListener('click', () => {
+                // Remove active from all
+                milestones.forEach(m => m.classList.remove('active'));
+                // Add active to clicked
+                milestone.classList.add('active');
+                
+                // Update progress fill
+                const progressFill = document.querySelector('.progress-fill');
+                progressFill.style.width = ((index + 1) / milestones.length * 100) + '%';
+            });
+        });
+
+        // Animate stat values
+        setTimeout(() => {
+            const statValues = document.querySelectorAll('.stat-value');
+            statValues.forEach(stat => {
+                const finalValue = parseInt(stat.textContent);
+                let currentValue = finalValue - 10;
+                const interval = setInterval(() => {
+                    if (currentValue < finalValue) {
+                        currentValue++;
+                        stat.innerHTML = currentValue + '%' + (stat.querySelector('.improvement-arrow') ? '<span class="improvement-arrow">↑</span>' : '');
+                    } else {
+                        clearInterval(interval);
+                    }
+                }, 100);
+            });
+        }, 2000);
+    </script>
+</body>
+</html>
