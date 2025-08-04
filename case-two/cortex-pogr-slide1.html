@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cortex + Pogr - Gaming Intelligence Revolution</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+            cursor: none;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #00ff00;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: all 0.1s ease;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-trail {
+            width: 8px;
+            height: 8px;
+            background: #00ff00;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.5;
+        }
+
+        /* Main Container */
+        .slide-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(ellipse at center, #0a0a0a 0%, #000 100%);
+        }
+
+        /* Animated Background */
+        .data-streams {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .stream {
+            position: absolute;
+            width: 2px;
+            height: 100px;
+            background: linear-gradient(to bottom, 
+                transparent, 
+                #00ff00, 
+                transparent
+            );
+            animation: streamFlow 3s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes streamFlow {
+            0% {
+                transform: translateY(-100vh) translateX(0);
+            }
+            100% {
+                transform: translateY(100vh) translateX(50px);
+            }
+        }
+
+        /* Matrix Rain Effect */
+        .matrix-rain {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .matrix-column {
+            position: absolute;
+            top: -100%;
+            font-family: monospace;
+            font-size: 14px;
+            color: #00ff00;
+            animation: matrixFall linear infinite;
+        }
+
+        @keyframes matrixFall {
+            to {
+                transform: translateY(200vh);
+            }
+        }
+
+        /* Logo Container */
+        .logo-evolution {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 60px;
+        }
+
+        /* Cortex Logo */
+        .cortex-logo {
+            font-size: 80px;
+            font-weight: 900;
+            letter-spacing: -2px;
+            position: relative;
+            background: linear-gradient(45deg, #00ff00, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Plus Symbol */
+        .plus-symbol {
+            font-size: 60px;
+            font-weight: 300;
+            color: #00ff00;
+            opacity: 0.8;
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Pogr Logo */
+        .pogr-logo {
+            font-size: 60px;
+            font-weight: 700;
+            color: #fff;
+            opacity: 0.9;
+            position: relative;
+        }
+
+        /* Main Title */
+        .main-content {
+            position: absolute;
+            text-align: center;
+            z-index: 20;
+            width: 100%;
+            top: 55%;
+        }
+
+        .title {
+            font-size: 72px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.5s forwards;
+        }
+
+        .title .highlight {
+            background: linear-gradient(90deg, #00ff00, #00ff88, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.5); }
+        }
+
+        .subtitle {
+            font-size: 28px;
+            font-weight: 300;
+            color: #888;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1s forwards;
+        }
+
+        .subtitle em {
+            color: #00ff00;
+            font-style: normal;
+            font-weight: 500;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+        }
+
+        /* Hexagon Grid Background */
+        .hex-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            background-image: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 35px,
+                    #00ff00 35px,
+                    #00ff00 36px
+                ),
+                repeating-linear-gradient(
+                    60deg,
+                    transparent,
+                    transparent 35px,
+                    #00ff00 35px,
+                    #00ff00 36px
+                ),
+                repeating-linear-gradient(
+                    120deg,
+                    transparent,
+                    transparent 35px,
+                    #00ff00 35px,
+                    #00ff00 36px
+                );
+            animation: hexFloat 20s linear infinite;
+        }
+
+        @keyframes hexFloat {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(30px, -30px); }
+        }
+
+        /* Particle System */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #00ff00;
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleFloat 10s infinite;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                opacity: 0;
+                transform: translate(0, 0) scale(0);
+            }
+            10% {
+                opacity: 1;
+                transform: translate(0, -20px) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(100px, -500px) scale(0);
+            }
+        }
+
+        /* Interactive Elements */
+        .cta-hint {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            color: #666;
+            animation: fadeInUp 1s ease-out 2s forwards, pulse 2s ease-in-out 3s infinite;
+            opacity: 0;
+        }
+
+        /* Glitch Effect */
+        .glitch {
+            position: relative;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+        }
+
+        .glitch::before {
+            animation: glitch1 0.5s infinite;
+            color: #00ff00;
+            z-index: -1;
+        }
+
+        .glitch::after {
+            animation: glitch2 0.5s infinite;
+            color: #00ffff;
+            z-index: -2;
+        }
+
+        @keyframes glitch1 {
+            0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+            20% { clip-path: inset(20% 0 40% 0); transform: translate(-2px, 2px); }
+            40% { clip-path: inset(40% 0 20% 0); transform: translate(2px, -2px); }
+            60% { clip-path: inset(60% 0 10% 0); transform: translate(-1px, 1px); }
+            80% { clip-path: inset(80% 0 5% 0); transform: translate(1px, -1px); }
+        }
+
+        @keyframes glitch2 {
+            0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+            20% { clip-path: inset(10% 0 60% 0); transform: translate(2px, -2px); }
+            40% { clip-path: inset(30% 0 40% 0); transform: translate(-2px, 2px); }
+            60% { clip-path: inset(50% 0 20% 0); transform: translate(1px, -1px); }
+            80% { clip-path: inset(70% 0 10% 0); transform: translate(-1px, 1px); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .cortex-logo { font-size: 60px; }
+            .pogr-logo { font-size: 45px; }
+            .title { font-size: 48px; }
+            .subtitle { font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-trail"></div>
+
+    <!-- Main Slide Container -->
+    <div class="slide-container">
+        <!-- Animated Background Elements -->
+        <div class="hex-grid"></div>
+        
+        <!-- Data Streams -->
+        <div class="data-streams" id="dataStreams"></div>
+        
+        <!-- Matrix Rain -->
+        <div class="matrix-rain" id="matrixRain"></div>
+
+        <!-- Logo Evolution Animation -->
+        <div class="logo-evolution">
+            <div class="cortex-logo glitch" data-text="CORTEX">CORTEX</div>
+            <div class="plus-symbol">+</div>
+            <div class="pogr-logo">POGR</div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h1 class="title">
+                The Future of <span class="highlight">Gaming Intelligence</span>
+            </h1>
+            <p class="subtitle">
+                From Game Launcher to <em>Gamer's Command Center</em>
+            </p>
+        </div>
+
+        <!-- Interactive Hint -->
+        <div class="cta-hint">Click anywhere to explore the vision</div>
+
+        <!-- Particles -->
+        <div id="particles"></div>
+    </div>
+
+    <script>
+        // Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        const cursorTrail = document.querySelector('.cursor-trail');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX - 10 + 'px';
+            cursor.style.top = e.clientY - 10 + 'px';
+            
+            setTimeout(() => {
+                cursorTrail.style.left = e.clientX - 4 + 'px';
+                cursorTrail.style.top = e.clientY - 4 + 'px';
+            }, 100);
+        });
+
+        // Data Streams
+        function createDataStreams() {
+            const container = document.getElementById('dataStreams');
+            for (let i = 0; i < 20; i++) {
+                const stream = document.createElement('div');
+                stream.className = 'stream';
+                stream.style.left = Math.random() * 100 + '%';
+                stream.style.animationDelay = Math.random() * 3 + 's';
+                stream.style.animationDuration = 3 + Math.random() * 2 + 's';
+                container.appendChild(stream);
+            }
+        }
+
+        // Matrix Rain
+        function createMatrixRain() {
+            const container = document.getElementById('matrixRain');
+            const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+            
+            for (let i = 0; i < 50; i++) {
+                const column = document.createElement('div');
+                column.className = 'matrix-column';
+                column.style.left = Math.random() * 100 + '%';
+                column.style.animationDuration = 5 + Math.random() * 10 + 's';
+                column.style.animationDelay = Math.random() * 5 + 's';
+                
+                let text = '';
+                for (let j = 0; j < 30; j++) {
+                    text += chars[Math.floor(Math.random() * chars.length)] + '<br>';
+                }
+                column.innerHTML = text;
+                container.appendChild(column);
+            }
+        }
+
+        // Particles
+        function createParticle(x, y) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+            particle.style.animationDelay = Math.random() * 2 + 's';
+            document.getElementById('particles').appendChild(particle);
+            
+            setTimeout(() => particle.remove(), 10000);
+        }
+
+        // Click Effect
+        document.addEventListener('click', (e) => {
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    createParticle(
+                        e.clientX + (Math.random() - 0.5) * 100,
+                        e.clientY + (Math.random() - 0.5) * 100
+                    );
+                }, i * 50);
+            }
+            
+            // Glitch effect on click
+            document.querySelector('.cortex-logo').style.animation = 'glitch1 0.2s 5';
+            setTimeout(() => {
+                document.querySelector('.cortex-logo').style.animation = 'pulse 2s ease-in-out infinite';
+            }, 1000);
+        });
+
+        // Initialize
+        createDataStreams();
+        createMatrixRain();
+
+        // Continuous particle generation
+        setInterval(() => {
+            if (Math.random() > 0.8) {
+                createParticle(
+                    Math.random() * window.innerWidth,
+                    window.innerHeight - 100
+                );
+            }
+        }, 500);
+    </script>
+</body>
+</html>

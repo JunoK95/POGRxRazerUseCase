@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Problem We Solve - Gaming Data Chaos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        /* Main Container */
+        .slide-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: radial-gradient(ellipse at center, #0a0000 0%, #000 100%);
+            overflow: hidden;
+        }
+
+        /* Chaotic Background */
+        .chaos-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 35px, #ff0000 35px, #ff0000 36px),
+                repeating-linear-gradient(-45deg, transparent, transparent 35px, #ff0000 35px, #ff0000 36px);
+            animation: chaosMove 20s linear infinite;
+        }
+
+        @keyframes chaosMove {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(-50px, -50px) rotate(1deg); }
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 60px 20px 30px;
+            z-index: 10;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .header h1 {
+            font-size: 64px;
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin-bottom: 10px;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+        }
+
+        .header .highlight {
+            color: #ff0000;
+            animation: glitch 2s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 100% { text-shadow: 0 0 20px rgba(255, 0, 0, 0.5); }
+            25% { text-shadow: -2px 0 #00ff00, 2px 0 #ff00ff; }
+            50% { text-shadow: 2px 0 #00ff00, -2px 0 #ff00ff; }
+            75% { text-shadow: 0 0 20px rgba(255, 0, 0, 0.5); }
+        }
+
+        /* Central Gamer Figure */
+        .gamer-container {
+            position: relative;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .gamer-figure {
+            width: 200px;
+            height: 200px;
+            background: #111;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 100px;
+            animation: frustration 3s ease-in-out infinite;
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.3);
+            z-index: 10;
+        }
+
+        @keyframes frustration {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.05) rotate(-5deg); }
+            75% { transform: scale(0.95) rotate(5deg); }
+        }
+
+        /* Floating App Windows */
+        .app-window {
+            position: absolute;
+            background: rgba(20, 20, 20, 0.9);
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            animation: float 6s ease-in-out infinite;
+            transition: all 0.3s ease;
+        }
+
+        .app-window:hover {
+            border-color: #ff0000;
+            transform: scale(1.05);
+            z-index: 20;
+        }
+
+        .app-window.active {
+            box-shadow: 0 15px 40px rgba(255, 0, 0, 0.3);
+        }
+
+        .app-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        .app-icon {
+            width: 30px;
+            height: 30px;
+            background: #444;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .app-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #999;
+        }
+
+        .app-content {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* Positioned Apps */
+        .app-1 { top: 10%; left: 10%; animation-delay: 0s; }
+        .app-2 { top: 15%; right: 15%; animation-delay: 1s; }
+        .app-3 { bottom: 20%; left: 15%; animation-delay: 2s; }
+        .app-4 { bottom: 25%; right: 10%; animation-delay: 3s; }
+        .app-5 { top: 40%; left: 5%; animation-delay: 4s; }
+        .app-6 { top: 30%; right: 5%; animation-delay: 5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(1deg); }
+            66% { transform: translateY(10px) rotate(-1deg); }
+        }
+
+        /* Problem List */
+        .problems-container {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #ff0000;
+            border-radius: 20px;
+            padding: 30px 50px;
+            backdrop-filter: blur(10px);
+            z-index: 15;
+            animation: slideUp 1s ease-out 0.5s both;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        .problem-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .problem-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 20px;
+            animation: fadeInLeft 0.5s ease-out both;
+        }
+
+        .problem-item:nth-child(1) { animation-delay: 1s; }
+        .problem-item:nth-child(2) { animation-delay: 1.2s; }
+        .problem-item:nth-child(3) { animation-delay: 1.4s; }
+        .problem-item:nth-child(4) { animation-delay: 1.6s; }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .problem-icon {
+            font-size: 28px;
+            color: #ff0000;
+            animation: shake 2s ease-in-out infinite;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* Result Box */
+        .result-box {
+            position: absolute;
+            bottom: 20px;
+            right: 40px;
+            background: #1a0000;
+            border: 2px solid #ff0000;
+            border-radius: 15px;
+            padding: 20px 30px;
+            animation: blink 2s ease-in-out infinite, slideInRight 1s ease-out 2s both;
+            z-index: 15;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; box-shadow: 0 0 30px rgba(255, 0, 0, 0.5); }
+            50% { opacity: 0.8; box-shadow: 0 0 10px rgba(255, 0, 0, 0.3); }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .result-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ff6666;
+        }
+
+        .result-duration {
+            font-size: 36px;
+            font-weight: 900;
+            color: #ff0000;
+            margin-top: 5px;
+        }
+
+        /* Connection Lines */
+        .connection-line {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #ff0000, transparent);
+            transform-origin: left center;
+            opacity: 0.3;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Error Messages */
+        .error-popup {
+            position: absolute;
+            background: #ff0000;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 600;
+            animation: errorPop 3s ease-in-out infinite;
+            z-index: 25;
+        }
+
+        @keyframes errorPop {
+            0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1) rotate(-5deg); }
+        }
+
+        .error-1 { top: 25%; left: 30%; animation-delay: 0.5s; }
+        .error-2 { top: 60%; right: 25%; animation-delay: 2s; }
+        .error-3 { bottom: 40%; left: 20%; animation-delay: 3.5s; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 48px; }
+            .app-window { transform: scale(0.8); }
+            .problems-container { padding: 20px 30px; }
+            .problem-item { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Slide Container -->
+    <div class="slide-container">
+        <!-- Chaotic Background -->
+        <div class="chaos-bg"></div>
+
+        <!-- Header -->
+        <div class="header">
+            <h1>Gamers Today Are <span class="highlight">Lost in Data Chaos</span></h1>
+        </div>
+
+        <!-- Central Gamer -->
+        <div class="gamer-container">
+            <!-- Frustrated Gamer -->
+            <div class="gamer-figure">😤</div>
+
+            <!-- Floating App Windows -->
+            <div class="app-window app-1">
+                <div class="app-header">
+                    <div class="app-icon">📊</div>
+                    <div class="app-title">Steam Stats</div>
+                </div>
+                <div class="app-content">
+                    Hours played: 1,247<br>
+                    Achievements: 67%<br>
+                    No detailed analytics...
+                </div>
+            </div>
+
+            <div class="app-window app-2">
+                <div class="app-header">
+                    <div class="app-icon">🎮</div>
+                    <div class="app-title">Discord Overlay</div>
+                </div>
+                <div class="app-content">
+                    Voice chat: Active<br>
+                    Game Activity: Visible<br>
+                    Performance data: None
+                </div>
+            </div>
+
+            <div class="app-window app-3">
+                <div class="app-header">
+                    <div class="app-icon">📈</div>
+                    <div class="app-title">Game Tracker</div>
+                </div>
+                <div class="app-content">
+                    K/D Ratio: 1.23<br>
+                    Rank: Gold III<br>
+                    Last update: 3 days ago
+                </div>
+            </div>
+
+            <div class="app-window app-4">
+                <div class="app-header">
+                    <div class="app-icon">🖱️</div>
+                    <div class="app-title">Razer Synapse</div>
+                </div>
+                <div class="app-content">
+                    DPI: 1600<br>
+                    Polling: 1000Hz<br>
+                    Impact on gameplay: ???
+                </div>
+            </div>
+
+            <div class="app-window app-5">
+                <div class="app-header">
+                    <div class="app-icon">🏆</div>
+                    <div class="app-title">Game Launcher #3</div>
+                </div>
+                <div class="app-content">
+                    Games: 12<br>
+                    Play time today: 0h<br>
+                    Insights: None
+                </div>
+            </div>
+
+            <div class="app-window app-6">
+                <div class="app-header">
+                    <div class="app-icon">⚙️</div>
+                    <div class="app-title">PC Monitor</div>
+                </div>
+                <div class="app-content">
+                    FPS: 144<br>
+                    CPU: 45°C<br>
+                    Game correlation: N/A
+                </div>
+            </div>
+
+            <!-- Connection Lines -->
+            <svg style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none;">
+                <line class="connection-line" x1="50%" y1="50%" x2="10%" y2="20%" stroke="#ff0000" stroke-width="1" opacity="0.2"/>
+                <line class="connection-line" x1="50%" y1="50%" x2="85%" y2="25%" stroke="#ff0000" stroke-width="1" opacity="0.2"/>
+                <line class="connection-line" x1="50%" y1="50%" x2="15%" y2="70%" stroke="#ff0000" stroke-width="1" opacity="0.2"/>
+                <line class="connection-line" x1="50%" y1="50%" x2="90%" y2="65%" stroke="#ff0000" stroke-width="1" opacity="0.2"/>
+            </svg>
+
+            <!-- Error Popups -->
+            <div class="error-popup error-1">SYNC FAILED</div>
+            <div class="error-popup error-2">DATA MISMATCH</div>
+            <div class="error-popup error-3">CONNECTION LOST</div>
+        </div>
+
+        <!-- Problems List -->
+        <div class="problems-container">
+            <div class="problem-list">
+                <div class="problem-item">
+                    <span class="problem-icon">❌</span>
+                    <span>Stats scattered across 20+ platforms</span>
+                </div>
+                <div class="problem-item">
+                    <span class="problem-icon">❌</span>
+                    <span>No unified progression tracking</span>
+                </div>
+                <div class="problem-item">
+                    <span class="problem-icon">❌</span>
+                    <span>Zero hardware-to-performance insights</span>
+                </div>
+                <div class="problem-item">
+                    <span class="problem-icon">❌</span>
+                    <span>Meaningless launches without engagement</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Box -->
+        <div class="result-box">
+            <div class="result-text">The Result: Cortex opens for</div>
+            <div class="result-duration">3 SECONDS</div>
+            <div class="result-text">then forgotten</div>
+        </div>
+    </div>
+
+    <script>
+        // Draggable Windows
+        const windows = document.querySelectorAll('.app-window');
+        
+        windows.forEach(window => {
+            let isDragging = false;
+            let currentX;
+            let currentY;
+            let initialX;
+            let initialY;
+            let xOffset = 0;
+            let yOffset = 0;
+
+            window.addEventListener('mousedown', dragStart);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', dragEnd);
+
+            function dragStart(e) {
+                initialX = e.clientX - xOffset;
+                initialY = e.clientY - yOffset;
+
+                if (e.target === window || window.contains(e.target)) {
+                    isDragging = true;
+                    window.classList.add('active');
+                    window.style.zIndex = 30;
+                }
+            }
+
+            function drag(e) {
+                if (isDragging) {
+                    e.preventDefault();
+                    currentX = e.clientX - initialX;
+                    currentY = e.clientY - initialY;
+
+                    xOffset = currentX;
+                    yOffset = currentY;
+
+                    window.style.transform = `translate(${currentX}px, ${currentY}px)`;
+                }
+            }
+
+            function dragEnd(e) {
+                initialX = currentX;
+                initialY = currentY;
+
+                isDragging = false;
+                window.classList.remove('active');
+                setTimeout(() => {
+                    window.style.zIndex = '';
+                }, 100);
+            }
+        });
+
+        // Glitch effect on gamer figure
+        const gamerFigure = document.querySelector('.gamer-figure');
+        
+        setInterval(() => {
+            if (Math.random() > 0.8) {
+                gamerFigure.style.filter = 'hue-rotate(90deg)';
+                setTimeout(() => {
+                    gamerFigure.style.filter = 'none';
+                }, 100);
+            }
+        }, 2000);
+
+        // Random connection line animations
+        const connectionLines = document.querySelectorAll('.connection-line');
+        
+        connectionLines.forEach((line, index) => {
+            setInterval(() => {
+                line.style.opacity = Math.random() * 0.4;
+                line.style.filter = `hue-rotate(${Math.random() * 30}deg)`;
+            }, 1000 + index * 200);
+        });
+
+        // Chaos intensifies over time
+        let chaosLevel = 1;
+        
+        setInterval(() => {
+            chaosLevel = Math.min(chaosLevel + 0.1, 2);
+            document.querySelectorAll('.app-window').forEach((window, index) => {
+                const currentAnimation = window.style.animation || '';
+                const duration = 6 / chaosLevel;
+                window.style.animation = `float ${duration}s ease-in-out infinite`;
+                window.style.animationDelay = `${index}s`;
+            });
+        }, 5000);
+    </script>
+</body>
+</html>

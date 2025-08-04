@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Statistics Layer - Live Performance Tracking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        /* Main Container */
+        .slide-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: 
+                radial-gradient(ellipse at top right, rgba(0, 255, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom left, rgba(0, 255, 136, 0.1) 0%, transparent 50%),
+                #000;
+        }
+
+        /* Animated Background */
+        .pulse-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            background: radial-gradient(circle, #00ff00 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.05; }
+            50% { transform: scale(1.1); opacity: 0.1; }
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 50px 20px 30px;
+            z-index: 10;
+        }
+
+        .header h1 {
+            font-size: 56px;
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, #00ff00, #00ffaa, #00ff00);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .header p {
+            font-size: 24px;
+            color: #999;
+            font-weight: 300;
+        }
+
+        /* Dashboard Container */
+        .dashboard-container {
+            flex: 1;
+            display: flex;
+            padding: 0 60px 60px;
+            gap: 40px;
+            position: relative;
+        }
+
+        /* Live Stats Panel */
+        .live-stats-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Current Match Card */
+        .current-match-card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff00;
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .match-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #00ff00;
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #00ff00;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .live-dot {
+            width: 10px;
+            height: 10px;
+            background: #00ff00;
+            border-radius: 50%;
+            animation: livePulse 1s ease-in-out infinite;
+        }
+
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.5); }
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .stat-item {
+            background: rgba(0, 255, 0, 0.05);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-item:hover {
+            background: rgba(0, 255, 0, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 255, 0, 0.2);
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 900;
+            color: #00ff00;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-change {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            opacity: 0;
+            animation: changeFlash 2s ease-out;
+        }
+
+        @keyframes changeFlash {
+            0% { opacity: 0; transform: translateY(10px); }
+            20% { opacity: 1; transform: translateY(0); }
+            80% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-10px); }
+        }
+
+        .positive { color: #00ff00; }
+        .negative { color: #ff0000; }
+
+        /* Performance Graph */
+        .performance-graph {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff00;
+            border-radius: 20px;
+            padding: 30px;
+            height: 250px;
+            position: relative;
+            backdrop-filter: blur(10px);
+            animation: slideInLeft 0.8s ease-out 0.2s both;
+        }
+
+        .graph-canvas {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            right: 30px;
+            top: 60px;
+            overflow: hidden;
+        }
+
+        .graph-line {
+            stroke: #00ff00;
+            stroke-width: 3;
+            fill: none;
+            filter: drop-shadow(0 0 10px #00ff00);
+        }
+
+        .graph-fill {
+            fill: url(#gradient);
+            opacity: 0.3;
+        }
+
+        .graph-point {
+            fill: #00ff00;
+            r: 4;
+            filter: drop-shadow(0 0 5px #00ff00);
+        }
+
+        /* Right Panel */
+        .right-panel {
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Global Rank Card */
+        .global-rank-card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff00;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            animation: slideInRight 0.8s ease-out 0.4s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .rank-value {
+            font-size: 64px;
+            font-weight: 900;
+            color: #00ff00;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .rank-movement {
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            animation: rankMove 2s ease-out;
+        }
+
+        @keyframes rankMove {
+            from { opacity: 0; transform: translateY(-50%) translateX(20px); }
+            to { opacity: 1; transform: translateY(-50%) translateX(0); }
+        }
+
+        /* Friends Leaderboard */
+        .friends-leaderboard {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff00;
+            border-radius: 20px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            animation: slideInRight 0.8s ease-out 0.6s both;
+            flex: 1;
+        }
+
+        .leaderboard-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #00ff00;
+        }
+
+        .friend-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0, 255, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .friend-item:hover {
+            background: rgba(0, 255, 0, 0.05);
+            margin: 0 -10px;
+            padding: 12px 10px;
+        }
+
+        .friend-rank {
+            font-size: 18px;
+            font-weight: 700;
+            color: #00ff00;
+            width: 30px;
+        }
+
+        .friend-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0, 255, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .friend-info {
+            flex: 1;
+        }
+
+        .friend-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .friend-stats {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .friend-status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00ff00;
+        }
+
+        /* Achievement Popup */
+        .achievement-popup {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: linear-gradient(135deg, #001a00, #003300);
+            border: 2px solid #00ff00;
+            border-radius: 20px;
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 20px 60px rgba(0, 255, 0, 0.4);
+            animation: achievementPop 5s ease-out;
+            z-index: 20;
+        }
+
+        @keyframes achievementPop {
+            0% { transform: translateX(-50%) translateY(100px); opacity: 0; }
+            10% { transform: translateX(-50%) translateY(0); opacity: 1; }
+            90% { transform: translateX(-50%) translateY(0); opacity: 1; }
+            100% { transform: translateX(-50%) translateY(100px); opacity: 0; }
+        }
+
+        .achievement-icon {
+            font-size: 48px;
+            animation: spin 2s ease-in-out;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .achievement-text h3 {
+            font-size: 18px;
+            color: #00ff00;
+            margin-bottom: 5px;
+        }
+
+        .achievement-text p {
+            font-size: 14px;
+            color: #999;
+        }
+
+        /* Technical Badge */
+        .tech-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #00ff00;
+            border-radius: 30px;
+            padding: 10px 20px;
+            font-size: 12px;
+            color: #00ff00;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 1s ease-out 1s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .dashboard-container {
+                flex-direction: column;
+                padding: 0 30px 30px;
+            }
+            .right-panel {
+                width: 100%;
+                flex-direction: row;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Slide Container -->
+    <div class="slide-container">
+        <!-- Animated Background -->
+        <div class="pulse-bg"></div>
+
+        <!-- Header -->
+        <div class="header">
+            <h1>Every Second, Every Stat, Every Victory</h1>
+            <p>Live Performance Tracking</p>
+        </div>
+
+        <!-- Dashboard Container -->
+        <div class="dashboard-container">
+            <!-- Live Stats Panel -->
+            <div class="live-stats-panel">
+                <!-- Current Match Card -->
+                <div class="current-match-card">
+                    <div class="match-header">
+                        <h2 class="match-title">Current Match: Valorant</h2>
+                        <div class="live-indicator">
+                            <div class="live-dot"></div>
+                            <span>LIVE</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value" id="kdRatio">2.47</div>
+                            <div class="stat-label">K/D Ratio</div>
+                            <div class="stat-change positive">+0.12</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="accuracy">68%</div>
+                            <div class="stat-label">Accuracy</div>
+                            <div class="stat-change positive">+3%</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="score">14,250</div>
+                            <div class="stat-label">Score</div>
+                            <div class="stat-change positive">+850</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="objectives">7</div>
+                            <div class="stat-label">Objectives</div>
+                            <div class="stat-change positive">+1</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="efficiency">94%</div>
+                            <div class="stat-label">Efficiency</div>
+                            <div class="stat-change negative">-2%</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="winRate">73%</div>
+                            <div class="stat-label">Win Rate</div>
+                            <div class="stat-change positive">+5%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance Graph -->
+                <div class="performance-graph">
+                    <h3 style="font-size: 20px; margin-bottom: 20px; color: #00ff00;">Performance Trajectory</h3>
+                    <div class="graph-canvas">
+                        <svg width="100%" height="100%" viewBox="0 0 400 150">
+                            <defs>
+                                <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#00ff00;stop-opacity:0.5" />
+                                    <stop offset="100%" style="stop-color:#00ff00;stop-opacity:0" />
+                                </linearGradient>
+                            </defs>
+                            <path class="graph-fill" d="M0,120 L50,110 L100,100 L150,85 L200,90 L250,70 L300,60 L350,50 L400,40 L400,150 L0,150 Z" />
+                            <path class="graph-line" d="M0,120 L50,110 L100,100 L150,85 L200,90 L250,70 L300,60 L350,50 L400,40" />
+                            <circle class="graph-point" cx="400" cy="40" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <!-- Global Rank Card -->
+                <div class="global-rank-card">
+                    <h3 style="font-size: 20px; color: #999;">Global Rank</h3>
+                    <div class="rank-value">
+                        #847
+                        <span class="rank-movement positive">↑12</span>
+                    </div>
+                    <p style="color: #999; font-size: 14px;">Top 0.1% Worldwide</p>
+                </div>
+
+                <!-- Friends Leaderboard -->
+                <div class="friends-leaderboard">
+                    <h3 class="leaderboard-title">Friend Racing</h3>
+                    <div class="friend-item">
+                        <div class="friend-rank">1</div>
+                        <div class="friend-avatar">🎯</div>
+                        <div class="friend-info">
+                            <div class="friend-name">You</div>
+                            <div class="friend-stats">2.47 K/D • 14,250 pts</div>
+                        </div>
+                        <div class="friend-status"></div>
+                    </div>
+                    <div class="friend-item">
+                        <div class="friend-rank">2</div>
+                        <div class="friend-avatar">🔥</div>
+                        <div class="friend-info">
+                            <div class="friend-name">xXSniperXx</div>
+                            <div class="friend-stats">2.31 K/D • 13,900 pts</div>
+                        </div>
+                        <div class="friend-status"></div>
+                    </div>
+                    <div class="friend-item">
+                        <div class="friend-rank">3</div>
+                        <div class="friend-avatar">⚡</div>
+                        <div class="friend-info">
+                            <div class="friend-name">ProGamer2023</div>
+                            <div class="friend-stats">2.15 K/D • 13,450 pts</div>
+                        </div>
+                        <div class="friend-status" style="background: #666;"></div>
+                    </div>
+                    <div class="friend-item">
+                        <div class="friend-rank">4</div>
+                        <div class="friend-avatar">🎮</div>
+                        <div class="friend-info">
+                            <div class="friend-name">NinjaStyle</div>
+                            <div class="friend-stats">1.98 K/D • 12,800 pts</div>
+                        </div>
+                        <div class="friend-status"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievement Popup -->
+        <div class="achievement-popup">
+            <div class="achievement-icon">🏆</div>
+            <div class="achievement-text">
+                <h3>Achievement Unlocked!</h3>
+                <p>Headshot Master - 10 headshots in one match</p>
+            </div>
+        </div>
+
+        <!-- Technical Badge -->
+        <div class="tech-badge">
+            WebSocket Streams • Intelligent Caching
+        </div>
+    </div>
+
+    <script>
+        // Live stat updates
+        function updateStat(id, increment, isPositive = true) {
+            const element = document.getElementById(id);
+            const current = parseFloat(element.textContent);
+            const newValue = current + increment;
+            
+            element.style.transform = 'scale(1.1)';
+            element.style.color = isPositive ? '#00ff00' : '#ff0000';
+            
+            setTimeout(() => {
+                element.textContent = id === 'accuracy' || id === 'efficiency' || id === 'winRate' 
+                    ? newValue.toFixed(0) + '%' 
+                    : id === 'kdRatio' 
+                    ? newValue.toFixed(2)
+                    : newValue.toLocaleString();
+                element.style.transform = 'scale(1)';
+                element.style.color = '#00ff00';
+            }, 200);
+            
+            // Show change indicator
+            const changeEl = element.parentElement.querySelector('.stat-change');
+            if (changeEl) {
+                changeEl.style.animation = 'none';
+                setTimeout(() => {
+                    changeEl.style.animation = 'changeFlash 2s ease-out';
+                }, 10);
+            }
+        }
+
+        // Simulate live updates
+        setInterval(() => {
+            const stats = [
+                { id: 'kdRatio', increment: 0.01, chance: 0.3 },
+                { id: 'accuracy', increment: 1, chance: 0.4 },
+                { id: 'score', increment: 250, chance: 0.6 },
+                { id: 'objectives', increment: 1, chance: 0.1 },
+                { id: 'efficiency', increment: -1, chance: 0.2, isPositive: false },
+                { id: 'winRate', increment: 1, chance: 0.2 }
+            ];
+            
+            stats.forEach(stat => {
+                if (Math.random() < stat.chance) {
+                    updateStat(stat.id, stat.increment, stat.isPositive !== false);
+                }
+            });
+        }, 3000);
+
+        // Animate graph
+        const graphLine = document.querySelector('.graph-line');
+        const graphFill = document.querySelector('.graph-fill');
+        const graphPoint = document.querySelector('.graph-point');
+        
+        let points = [120, 110, 100, 85, 90, 70, 60, 50, 40];
+        
+        function updateGraph() {
+            points.shift();
+            const newPoint = Math.max(20, points[points.length - 1] + (Math.random() - 0.3) * 20);
+            points.push(newPoint);
+            
+            const pathData = points.map((y, i) => `${i * 50},${y}`).join(' L');
+            graphLine.setAttribute('d', `M${pathData}`);
+            graphFill.setAttribute('d', `M${pathData} L400,150 L0,150 Z`);
+            graphPoint.setAttribute('cy', newPoint);
+            
+            graphPoint.style.r = '8';
+            setTimeout(() => graphPoint.style.r = '4', 200);
+        }
+        
+        setInterval(updateGraph, 2000);
+
+        // Rank movement animation
+        const rankMovement = document.querySelector('.rank-movement');
+        setInterval(() => {
+            const change = Math.floor(Math.random() * 5) + 1;
+            rankMovement.textContent = '↑' + change;
+            rankMovement.style.animation = 'none';
+            setTimeout(() => {
+                rankMovement.style.animation = 'rankMove 2s ease-out';
+            }, 10);
+        }, 5000);
+
+        // Achievement popups
+        const achievements = [
+            { icon: '🏆', title: 'Achievement Unlocked!', desc: 'Headshot Master - 10 headshots in one match' },
+            { icon: '⭐', title: 'New Milestone!', desc: 'Win Streak - 5 victories in a row' },
+            { icon: '🎯', title: 'Perfect Shot!', desc: 'Sniper Elite - 95% accuracy maintained' },
+            { icon: '🔥', title: 'On Fire!', desc: 'Domination - 20 eliminations without dying' }
+        ];
+        
+        let achievementIndex = 0;
+        setInterval(() => {
+            const popup = document.querySelector('.achievement-popup');
+            const achievement = achievements[achievementIndex % achievements.length];
+            
+            popup.querySelector('.achievement-icon').textContent = achievement.icon;
+            popup.querySelector('h3').textContent = achievement.title;
+            popup.querySelector('p').textContent = achievement.desc;
+            
+            popup.style.animation = 'none';
+            setTimeout(() => {
+                popup.style.animation = 'achievementPop 5s ease-out';
+            }, 10);
+            
+            achievementIndex++;
+        }, 8000);
+    </script>
+</body>
+</html>
